@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "starlight"
+version = "0.1.0"
+description = "STARlight: a multimedia expert system for behavioral interview practice"
+requires-python = ">=3.12"
+dependencies = [
+    "pyyaml>=6",
+    "av>=12",
+    "numpy>=1.26",
+    "pdfplumber>=0.11",
+    "jsonschema>=4",
+]
+
+[project.optional-dependencies]
+speech = ["faster-whisper>=1.1"]
+nlp = ["spacy>=3.8"]
+api = ["fastapi>=0.115", "uvicorn[standard]>=0.30", "python-multipart>=0.0.9"]
+dev = ["pytest>=8", "ruff>=0.6", "httpx>=0.27"]
+
+[tool.setuptools.packages.find]
+include = ["starlight*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
