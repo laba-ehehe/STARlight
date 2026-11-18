@@ -2,14 +2,24 @@
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
-from starlight.core import Fact, TimeSpan
+from starlight.core import Fact, TimeSpan, Transcript
 
 BACKEND = Path(__file__).resolve().parents[1]
 KNOWLEDGE = BACKEND / "knowledge"
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
 REPO = BACKEND.parent
+
+sys.path.insert(0, str(BACKEND / "scripts"))
+from make_fixture import build
+
+
+def spoken(text: str, offset_ms: int = 0, wpm: float = 150.0, qid: str = "q1") -> Transcript:
+    """Transcript with synthetic word timings; write [pause 2.5] for a silence."""
+    return Transcript.from_dict(build(text, qid=qid, question="", competency="teamwork",
+                                      offset_ms=offset_ms, wpm=wpm))
 
 
 def answer_facts(qid: str = "q1", start: int = 10_000, **overrides) -> list[Fact]:
