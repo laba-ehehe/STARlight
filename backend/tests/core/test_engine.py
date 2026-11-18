@@ -27,9 +27,11 @@ def facts_of(engine, pred):
 
 def test_strong_answer_raises_no_issues(engine):
     engine.wm.assert_all(answer_facts())
-    new = engine.forward_chain(ANALYSIS)
-    assert new == []
-    assert len(engine.trace) == 0
+    engine.forward_chain(ANALYSIS)
+    assert engine.wm.facts("ISSUE") == []
+    assert {f.args[2] for f in engine.wm.facts("STRENGTH")} == {
+        "well-structured", "clear-ownership", "measurable-impact", "clear-delivery",
+        "good-length"}
 
 
 def test_missing_result_and_fillers(engine):
@@ -205,9 +207,10 @@ def test_why_not_explains_missing_strength(kb):
     engine.wm.assert_fact(Fact.of("STRENGTH", "q1", "examples", "real-example"))
     engine.forward_chain(ANALYSIS)
     engine.forward_chain("feedback")
-    # examples has no issue → it leads; organization is blocked by R7's issue
-    assert [str(f) for f in engine.wm.facts("LEAD-STRENGTH")] == [
-        "(LEAD-STRENGTH q1 examples real-example)"]
+    # examples and clarity have no issue → they lead; organization is blocked by R7's issue
+    leads = {str(f) for f in engine.wm.facts("LEAD-STRENGTH")}
+    assert "(LEAD-STRENGTH q1 examples real-example)" in leads
+    assert not any("organization" in f for f in leads)
     why = engine.trace.why_not(["LEAD-STRENGTH", "q1", "organization", "?k"], kb, engine.wm)
     assert not why["holds"]
     [reason] = why["reasons"]

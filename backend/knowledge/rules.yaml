@@ -8,7 +8,15 @@
 #   feedback: {criterion, polarity, text, tip} shown in the report
 #
 # Criteria: relevance | clarity | organization | examples
-# Groups:   question_planning | answer_analysis | delivery | session_control | goal | feedback
+# Groups:   question_planning | answer_analysis | delivery | session_control | goal |
+#           rating | feedback
+#
+# Run order (each group sees the conclusions of the ones before it):
+#   planning:     question_planning
+#   live:         answer_analysis + delivery + session_control, then backward chaining on goal
+#   post-session: answer_analysis + delivery, then rating, then feedback
+# Rating and feedback rules count or negate ISSUE facts, so they must run after
+# analysis has finished.
 # Status:   hypothesis (drafted from coaching practice) | team-reviewed | confirmed | revised | rejected
 #
 # Every analysis rule that finds a problem also asserts (ISSUE ?a criterion kind),
@@ -74,6 +82,112 @@ rules:
       - not: [PLANNED, ?_, ?other]
     then:
       - assert: [BLOCK-COMPETENCY, ?c]
+
+  - id: R18
+    name: conflict-cues
+    group: question_planning
+    priority: 50
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The job description mentions negotiation, resolving issues or difficult customers.
+    if:
+      - fact: [JD-CUE, conflict, ?cue]
+    then:
+      - assert: [TARGET-COMPETENCY, conflict, HIGH]
+
+  - id: R19
+    name: problem-solving-cues
+    group: question_planning
+    priority: 50
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The job description mentions analysis, debugging or ambiguity.
+    if:
+      - fact: [JD-CUE, problem-solving, ?cue]
+    then:
+      - assert: [TARGET-COMPETENCY, problem-solving, HIGH]
+
+  - id: R20
+    name: challenges-cues
+    group: question_planning
+    priority: 50
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The job description mentions a fast pace, deadlines or adapting.
+    if:
+      - fact: [JD-CUE, challenges, ?cue]
+    then:
+      - assert: [TARGET-COMPETENCY, challenges, HIGH]
+
+  - id: R21
+    name: default-competencies
+    group: question_planning
+    priority: 30
+    status: hypothesis
+    source: PLAN §6 draft
+    description: >
+      No competency reached HIGH (a vague job description), so use the three
+      competencies most interviews ask about.
+    if:
+      - fact: [SESSION-DURATION, ?d]
+      - not: [TARGET-COMPETENCY, ?_, HIGH]
+    then:
+      - assert: [TARGET-COMPETENCY, teamwork, MEDIUM]
+      - assert: [TARGET-COMPETENCY, problem-solving, MEDIUM]
+      - assert: [TARGET-COMPETENCY, challenges, MEDIUM]
+
+  - id: R22
+    name: early-career-examples
+    group: question_planning
+    priority: 30
+    status: hypothesis
+    source: PLAN §6 draft
+    description: >
+      The role is for interns, students or new graduates, so prefer questions that
+      can be answered with class, club or project examples.
+    if:
+      - fact: [EARLY-CAREER-CUE, ?cue]
+    then:
+      - assert: [PREFER-EXAMPLES, academic]
+
+  - id: R23
+    name: rank-by-cues
+    group: question_planning
+    priority: 25
+    status: hypothesis
+    source: PLAN §6 draft
+    description: >
+      More HIGH competencies than questions: rank them by how many cues the job
+      description has for each, so the planner drops the least mentioned ones.
+    if:
+      - fact: [QUESTION-COUNT, ?n]
+      - count: [TARGET-COMPETENCY, ?_, HIGH]
+        as: ?high
+      - test: "?high > ?n"
+      - fact: [TARGET-COMPETENCY, ?c, HIGH]
+      - count: [JD-CUE, ?c, ?_]
+        as: ?k
+    then:
+      - assert: [CUE-WEIGHT, ?c, ?k]
+
+  - id: R24
+    name: fill-with-other-competencies
+    group: question_planning
+    priority: 20
+    status: hypothesis
+    source: PLAN §6 draft
+    description: >
+      More questions than target competencies: add another competency before
+      asking a second question about the same one.
+    if:
+      - fact: [QUESTION-COUNT, ?n]
+      - count: [TARGET-COMPETENCY, ?_, ?_]
+        as: ?targets
+      - test: "?n > ?targets"
+      - fact: [COMPETENCY, ?c]
+      - not: [TARGET-COMPETENCY, ?c, ?_]
+    then:
+      - assert: [TARGET-COMPETENCY, ?c, MEDIUM]
 
   # ======================================================= answer analysis (R5–R11)
 
@@ -233,6 +347,248 @@ rules:
       text: Most of the answer is setup; little of it is about what you did.
       tip: Spend most of your time on the Action — the steps you took and why.
 
+  - id: R30
+    name: bare-answer
+    group: answer_analysis
+    priority: 40
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The answer is under 15 seconds and under 25 words; invite the candidate to expand.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [ANSWER-DURATION, ?a, ?s]
+      - fact: [WORD-COUNT, ?a, ?w]
+      - test: "?s < 15 and ?w < 25"
+    then:
+      - assert: [BARE-ANSWER, ?a]
+      - assert: [ISSUE, ?a, organization, bare-answer]
+    followup: Take your time — can you walk me through it?
+    feedback:
+      criterion: organization
+      polarity: negative
+      text: The answer was only a sentence or two.
+      tip: Treat every behavioral question as a short story — situation, what you did, how it ended.
+
+  - id: R31
+    name: well-structured
+    group: answer_analysis
+    priority: 25
+    status: hypothesis
+    source: PLAN §6 draft
+    description: All four STAR parts are present and at least 40% of the answer is Action.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [STAR-SEGMENT, ?a, situation, ?_]
+      - fact: [STAR-SEGMENT, ?a, task, ?_]
+      - fact: [STAR-SEGMENT, ?a, action, ?_]
+      - fact: [STAR-SEGMENT, ?a, result, ?_]
+      - fact: [ACTION-SHARE, ?a, ?share]
+      - test: "?share >= 0.4"
+    then:
+      - assert: [WELL-STRUCTURED, ?a]
+      - assert: [STRENGTH, ?a, organization, well-structured]
+    feedback:
+      criterion: organization
+      polarity: positive
+      text: Clear STAR structure, with most of the time spent on what you did.
+
+  - id: R32
+    name: shows-learning
+    group: answer_analysis
+    priority: 25
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The answer reflects on what the candidate learned.
+    if:
+      - fact: [REFLECTION, ?a]
+        as: ?reflection
+    then:
+      - assert: [STRENGTH, ?a, examples, shows-learning]
+        span: [?reflection]
+    feedback:
+      criterion: examples
+      polarity: positive
+      text: You said what you learned, which shows self-awareness.
+
+  - id: R33
+    name: multiple-stories
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The answer tells two or more separate stories.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [STORY-COUNT, ?a, ?n]
+      - test: "?n >= 2"
+    then:
+      - assert: [MULTIPLE-EXAMPLES, ?a]
+      - assert: [ISSUE, ?a, organization, multiple-stories]
+    feedback:
+      criterion: organization
+      polarity: negative
+      text: The answer jumps between several examples instead of telling one well.
+      tip: Pick the single strongest example and go deeper on it.
+
+  - id: R34
+    name: generic-answer
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: PLAN §6 draft
+    description: >
+      The answer makes general self-claims ("I always", "I'm a hard worker") and
+      never sets up a specific situation.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [GENERIC-CLAIM, ?a, ?phrase, ?at]
+        as: ?claim
+      - not: [STAR-SEGMENT, ?a, situation, ?_]
+    then:
+      - assert: [GENERIC-ANSWER, ?a]
+        span: [?claim]
+      - assert: [ISSUE, ?a, examples, generic]
+        span: [?claim]
+    followup: Can you give me one specific time that happened?
+    feedback:
+      criterion: examples
+      polarity: negative
+      text: The answer describes how you usually are, not one thing that happened.
+      tip: "Replace \"I always...\" with \"Last semester, when...\" and tell that one story."
+
+  - id: R35
+    name: blame-framing
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: PLAN §6 draft
+    description: >
+      A conflict answer blames others ("they didn't", "his fault") without showing
+      what the candidate did to resolve it.
+    if:
+      - fact: [QUESTION, ?a, conflict]
+      - fact: [BLAME-CUE, ?a, ?phrase, ?at]
+        as: ?blame
+      - fact: [PRONOUN-RATIO, ?a, ?ratio]
+      - fact: [ACTION-SHARE, ?a, ?share]
+      - test: "?ratio > 1 or ?share < 0.4"
+    then:
+      - assert: [BLAME-FRAMING, ?a]
+        span: [?blame]
+      - assert: [ISSUE, ?a, examples, blame-framing]
+        span: [?blame]
+    feedback:
+      criterion: examples
+      polarity: negative
+      text: The story focuses on what others did wrong.
+      tip: Spend one sentence on the problem, then focus on the steps you took to resolve it.
+
+  - id: R36
+    name: missing-lesson
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The outcome was negative (failed, missed) and the answer never says what was learned.
+    if:
+      - fact: [NEGATIVE-OUTCOME, ?a, ?text]
+        as: ?outcome
+      - not: [REFLECTION, ?a]
+    then:
+      - assert: [MISSING-LESSON, ?a]
+        span: [?outcome]
+      - assert: [ISSUE, ?a, examples, missing-lesson]
+        span: [?outcome]
+    followup: What did you learn from it?
+    feedback:
+      criterion: examples
+      polarity: negative
+      text: The story ends with a setback but not with what you took away from it.
+      tip: "Close with the lesson and how you used it later: \"Since then, I always...\""
+
+  - id: R37
+    name: weak-leadership-evidence
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: PLAN §6 draft
+    description: >
+      A leadership question, but the Action has no initiative verbs (led, organized,
+      proposed, decided).
+    if:
+      - fact: [QUESTION, ?a, leadership]
+      - fact: [ANSWER, ?a]
+      - not: [INITIATIVE-VERB, ?a, ?_, ?_]
+    then:
+      - assert: [WEAK-COMPETENCY-EVIDENCE, ?a]
+      - assert: [ISSUE, ?a, relevance, weak-evidence]
+    feedback:
+      criterion: relevance
+      polarity: negative
+      text: The story does not show you leading — deciding, organizing or proposing.
+      tip: Name the moment you took charge, e.g. "I proposed we split the work by feature and set up the weekly check-ins."
+
+  - id: R38
+    name: clear-ownership-strength
+    group: answer_analysis
+    priority: 25
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The candidate says "I" at least as often as "we" and the Action is at least 40%.
+    if:
+      - fact: [PRONOUN-RATIO, ?a, ?ratio]
+        as: ?pronouns
+      - fact: [ACTION-SHARE, ?a, ?share]
+      - test: "?ratio <= 1 and ?share >= 0.4"
+    then:
+      - assert: [STRENGTH, ?a, examples, clear-ownership]
+        span: [?pronouns]
+    feedback:
+      criterion: examples
+      polarity: positive
+      text: It is clear which parts you did yourself.
+
+  - id: R39
+    name: measurable-impact
+    group: answer_analysis
+    priority: 25
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The result is backed by a number.
+    if:
+      - fact: [QUANTIFIED-RESULT, ?a, ?text]
+        as: ?number
+    then:
+      - assert: [STRENGTH, ?a, examples, measurable-impact]
+        span: [?number]
+    feedback:
+      criterion: examples
+      polarity: positive
+      text: You backed the result with a number, which makes the impact concrete.
+
+  - id: R40
+    name: long-setup
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The Situation takes more than 35% of the answer's words.
+    if:
+      - fact: [SITUATION-SHARE, ?a, ?share]
+      - test: "?share > 0.35"
+      - fact: [STAR-SEGMENT, ?a, situation, ?i]
+        as: ?setup
+    then:
+      - assert: [LONG-SETUP, ?a]
+        span: [?setup]
+      - assert: [ISSUE, ?a, organization, long-setup]
+        span: [?setup]
+    feedback:
+      criterion: organization
+      polarity: negative
+      text: The setup takes a large part of the answer.
+      tip: Cut the Situation to two sentences; the marked part is the setup.
+
   # ======================================================= delivery (R12–R14)
 
   - id: R12
@@ -287,7 +643,7 @@ rules:
       - fact: [PACE, ?a, ?wpm]
       - fuzzy: [?wpm, pace, FAST]
     then:
-      - assert: [CLARITY-ISSUE, ?a, pace, all]
+      - assert: [CLARITY-ISSUE, ?a, fast-pace, all]
       - assert: [ISSUE, ?a, clarity, fast-pace]
     feedback:
       criterion: clarity
@@ -320,6 +676,122 @@ rules:
       text: Frequent filler words ("um", "uh", "like") distract from the content.
       tip: Replace fillers with a short silent pause; listen to the marked moments.
 
+  - id: R41
+    name: slow-pace
+    group: delivery
+    priority: 20
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Speaking pace is SLOW.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [PACE, ?a, ?wpm]
+      - fuzzy: [?wpm, pace, SLOW]
+    then:
+      - assert: [CLARITY-ISSUE, ?a, slow-pace, all]
+      - assert: [ISSUE, ?a, clarity, slow-pace]
+    feedback:
+      criterion: clarity
+      polarity: negative
+      text: The pace is slow, which can sound unsure.
+      tip: Practice the answer out loud until it flows; aim for about 130–160 words per minute.
+
+  - id: R42
+    name: long-pauses
+    group: delivery
+    priority: 20
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Three or more pauses longer than 2 seconds in one answer; mark each one.
+    if:
+      - fact: [ANSWER, ?a]
+        as: ?answer
+      - count: [LONG-PAUSE, ?a, ?_, ?_]
+        as: ?n
+      - test: "?n >= 3"
+      - fact: [LONG-PAUSE, ?a, ?at, ?ms]
+        as: ?pause
+    then:
+      - assert: [CLARITY-ISSUE, ?a, pause, ?at]
+        span: [?pause]
+      - assert: [ISSUE, ?a, clarity, long-pauses]
+        span: [?answer]
+    feedback:
+      criterion: clarity
+      polarity: negative
+      text: Several long pauses break up the story.
+      tip: Outline the four STAR points before you start speaking; listen to the marked pauses.
+
+  - id: R43
+    name: hedging
+    group: delivery
+    priority: 20
+    status: hypothesis
+    source: PLAN §6 draft
+    description: More than 3 hedges per minute ("I think", "kind of", "maybe"); mark each one.
+    if:
+      - fact: [ANSWER, ?a]
+        as: ?answer
+      - fact: [ANSWER-DURATION, ?a, ?s]
+      - count: [HEDGE, ?a, ?_, ?_]
+        as: ?h
+      - bind: {?rate: "?h * 60 / max(?s, 1)"}
+      - test: "?rate > 3"
+      - fact: [HEDGE, ?a, ?phrase, ?at]
+        as: ?hedge
+    then:
+      - assert: [CLARITY-ISSUE, ?a, hedge, ?at]
+        span: [?hedge]
+      - assert: [ISSUE, ?a, clarity, hedging]
+        span: [?answer]
+    feedback:
+      criterion: clarity
+      polarity: negative
+      text: Frequent hedging ("I think", "kind of") makes your actions sound uncertain.
+      tip: State what you did plainly — "I rewrote the query", not "I kind of tried to fix it".
+
+  - id: R44
+    name: clear-delivery
+    group: delivery
+    priority: 15
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Pace is NORMAL and there are at most 3 fillers per minute.
+    if:
+      - fact: [ANSWER, ?a]
+        as: ?answer
+      - fact: [PACE, ?a, ?wpm]
+      - fuzzy: [?wpm, pace, NORMAL]
+      - fact: [FILLER-RATE, ?a, ?rate]
+      - test: "?rate <= 3"
+    then:
+      - assert: [STRENGTH, ?a, clarity, clear-delivery]
+        span: [?answer]
+    feedback:
+      criterion: clarity
+      polarity: positive
+      text: Steady pace with few filler words — easy to follow.
+
+  - id: R45
+    name: good-length
+    group: delivery
+    priority: 15
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The answer duration is IDEAL.
+    if:
+      - fact: [ANSWER, ?a]
+        as: ?answer
+      - fact: [ANSWER-DURATION, ?a, ?s]
+      - fuzzy: [?s, answer_duration, IDEAL]
+    then:
+      - assert: [STRENGTH, ?a, organization, good-length]
+        span: [?answer]
+    feedback:
+      criterion: organization
+      polarity: positive
+      text: A good length — long enough for detail, short enough to hold attention.
+
   # ======================================================= session control (R15)
 
   - id: R15
@@ -342,11 +814,87 @@ rules:
       text: This question ran over its time budget, so the follow-up was skipped.
       tip: Keep answers near two minutes so there is time for follow-ups.
 
+  - id: R25
+    name: phone-followup-cap
+    group: session_control
+    priority: 80
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Phone screens are short; ask at most one follow-up per question.
+    if:
+      - fact: [INTERVIEW-FORMAT, phone]
+    then:
+      - assert: [FOLLOWUP-CAP, 1]
+
+  - id: R26
+    name: panel-followup-cap
+    group: session_control
+    priority: 80
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Panel interviews dig deeper; allow up to two follow-ups per question.
+    if:
+      - fact: [INTERVIEW-FORMAT, panel]
+    then:
+      - assert: [FOLLOWUP-CAP, 2]
+
+  - id: R27
+    name: one-way-video
+    group: session_control
+    priority: 80
+    status: hypothesis
+    source: PLAN §6 draft
+    description: One-way video interviews have no live interviewer, so no follow-ups.
+    if:
+      - fact: [INTERVIEW-FORMAT, video]
+    then:
+      - assert: [FOLLOWUP-CAP, 0]
+    feedback:
+      criterion: pacing
+      polarity: note
+      text: One-way video interviews have no follow-ups, so each answer has to be complete on its own.
+
+  - id: R28
+    name: followup-cap-reached
+    group: session_control
+    priority: 85
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The question already had as many follow-ups as the format allows.
+    if:
+      - fact: [FOLLOWUPS-ASKED, ?q, ?k]
+      - fact: [FOLLOWUP-CAP, ?cap]
+      - test: "?k >= ?cap"
+    then:
+      - assert: [SKIP-FOLLOWUP, ?q, cap-reached]
+
+  - id: R29
+    name: no-time-for-next
+    group: session_control
+    priority: 85
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The time left is less than the next question's budget, so move to closing.
+    if:
+      - fact: [TIME-LEFT, ?t]
+      - fact: [NEXT-QUESTION, ?q]
+      - fact: [BUDGET, ?q, ?b]
+      - test: "?t < ?b"
+    then:
+      - assert: [GO-TO-CLOSING, ?q]
+    feedback:
+      criterion: pacing
+      polarity: note
+      text: The session ran out of time before the last planned question.
+      tip: Answers of about two minutes leave room for every planned question.
+
   # ======================================================= R16: goal for backward chaining
   # The follow-up is chosen by trying to prove (COMPLETE ?a). Its sub-goals are listed
   # in R16's priority order: OFF-TOPIC > HYPOTHETICAL > UNCLEAR-OWNERSHIP >
   # MISSING-RESULT > UNSUPPORTED-RESULT. The first sub-goal that cannot be proven
   # picks the follow-up (the follow-up text of the rule that blocked it).
+  # Phase 2 adds ANSWERED first (R30 bare answer), GENERIC-ANSWER to REAL-EXAMPLE
+  # (R34) and LESSON-STATED last (R36).
 
   - id: R16
     name: complete-answer
@@ -357,13 +905,26 @@ rules:
     description: An answer is complete when all five sub-goals hold, checked in priority order.
     if:
       - fact: [ANSWER, ?a]
+      - fact: [ANSWERED, ?a]
       - fact: [ON-TOPIC, ?a]
       - fact: [REAL-EXAMPLE, ?a]
       - fact: [CLEAR-OWNERSHIP, ?a]
       - fact: [RESULT-STATED, ?a]
       - fact: [RESULT-SUPPORTED, ?a]
+      - fact: [LESSON-STATED, ?a]
     then:
       - assert: [COMPLETE, ?a]
+
+  - id: R16.0
+    name: answered
+    group: goal
+    status: hypothesis
+    source: PLAN §6 (R30)
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [BARE-ANSWER, ?a]
+    then:
+      - assert: [ANSWERED, ?a]
 
   - id: R16.1
     name: on-topic
@@ -384,6 +945,7 @@ rules:
     if:
       - fact: [ANSWER, ?a]
       - not: [HYPOTHETICAL-ANSWER, ?a]
+      - not: [GENERIC-ANSWER, ?a]
     then:
       - assert: [REAL-EXAMPLE, ?a]
 
@@ -420,7 +982,213 @@ rules:
     then:
       - assert: [RESULT-SUPPORTED, ?a]
 
-  # ======================================================= feedback (R17)
+  - id: R16.6
+    name: lesson-stated
+    group: goal
+    status: hypothesis
+    source: PLAN §6 (R36)
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [MISSING-LESSON, ?a]
+    then:
+      - assert: [LESSON-STATED, ?a]
+
+
+  # ======================================================= rating (R46–R50)
+  # One rating per criterion: strong | adequate | needs-work. "Strong" rules require
+  # the absence of ISSUE facts (not), so WHY-NOT names the exact issue that blocked it.
+
+  - id: R46
+    name: relevance-needs-work
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: An off-topic answer needs work on relevance.
+    if:
+      - fact: [OFF-TOPIC, ?a]
+    then:
+      - assert: [RATING, ?a, relevance, needs-work]
+
+  - id: R47a
+    name: relevance-adequate
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: On topic, but relevance is only 0.3–0.6 or the competency evidence is weak.
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [OFF-TOPIC, ?a]
+      - fact: [RELEVANCE, ?a, ?score]
+      - count: [ISSUE, ?a, relevance, ?_]
+        as: ?n
+      - test: "?score < 0.6 or ?n > 0"
+    then:
+      - assert: [RATING, ?a, relevance, adequate]
+
+  - id: R47b
+    name: relevance-strong
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Relevance is at least 0.6 and there are no relevance issues.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [RELEVANCE, ?a, ?score]
+      - test: "?score >= 0.6"
+      - not: [ISSUE, ?a, relevance, ?_]
+    then:
+      - assert: [RATING, ?a, relevance, strong]
+
+  - id: R48a
+    name: clarity-strong
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: No clarity issues.
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [ISSUE, ?a, clarity, ?_]
+    then:
+      - assert: [RATING, ?a, clarity, strong]
+
+  - id: R48b
+    name: clarity-adequate
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Exactly one kind of clarity issue.
+    if:
+      - fact: [ANSWER, ?a]
+      - count: [ISSUE, ?a, clarity, ?_]
+        as: ?n
+      - test: "?n == 1"
+    then:
+      - assert: [RATING, ?a, clarity, adequate]
+
+  - id: R48c
+    name: clarity-needs-work
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Two or more kinds of clarity issues.
+    if:
+      - fact: [ANSWER, ?a]
+      - count: [ISSUE, ?a, clarity, ?_]
+        as: ?n
+      - test: "?n >= 2"
+    then:
+      - assert: [RATING, ?a, clarity, needs-work]
+
+  - id: R49a
+    name: organization-strong
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: No organization issues.
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [ISSUE, ?a, organization, ?_]
+    then:
+      - assert: [RATING, ?a, organization, strong]
+
+  - id: R49b
+    name: organization-adequate
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Exactly one kind of organization issue.
+    if:
+      - fact: [ANSWER, ?a]
+      - count: [ISSUE, ?a, organization, ?_]
+        as: ?n
+      - test: "?n == 1"
+    then:
+      - assert: [RATING, ?a, organization, adequate]
+
+  - id: R49c
+    name: organization-needs-work
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Two or more kinds of organization issues.
+    if:
+      - fact: [ANSWER, ?a]
+      - count: [ISSUE, ?a, organization, ?_]
+        as: ?n
+      - test: "?n >= 2"
+    then:
+      - assert: [RATING, ?a, organization, needs-work]
+
+  - id: R50a
+    name: examples-strong
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: A real, owned example with a stated result and no example issues.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [STAR-SEGMENT, ?a, result, ?_]
+      - not: [ISSUE, ?a, examples, ?_]
+    then:
+      - assert: [RATING, ?a, examples, strong]
+
+  - id: R50b
+    name: examples-adequate
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Exactly one example issue.
+    if:
+      - fact: [ANSWER, ?a]
+      - count: [ISSUE, ?a, examples, ?_]
+        as: ?n
+      - test: "?n == 1"
+    then:
+      - assert: [RATING, ?a, examples, adequate]
+
+  - id: R50c
+    name: examples-needs-work
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: Two or more example issues.
+    if:
+      - fact: [ANSWER, ?a]
+      - count: [ISSUE, ?a, examples, ?_]
+        as: ?n
+      - test: "?n >= 2"
+    then:
+      - assert: [RATING, ?a, examples, needs-work]
+
+  - id: R50d
+    name: examples-adequate-no-result
+    group: rating
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: No example issues, but no result either, so the example is unfinished.
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [STAR-SEGMENT, ?a, result, ?_]
+      - not: [ISSUE, ?a, examples, ?_]
+    then:
+      - assert: [RATING, ?a, examples, adequate]
+
+  # ======================================================= feedback (R17, R51, R53)
+  # R52 ("every negative item gets a concrete tip") is enforced by KnowledgeBase.validate():
+  # a rule with negative feedback and no tip is an error.
 
   - id: R17
     name: lead-with-strength
@@ -438,3 +1206,39 @@ rules:
     then:
       - assert: [LEAD-STRENGTH, ?a, ?criterion, ?kind]
         span: [?strength]
+
+  - id: R51
+    name: feedback-cap
+    group: feedback
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: >
+      More than 3 kinds of issue in one answer: show only the 3 highest-priority
+      ones, so the feedback stays actionable.
+    if:
+      - fact: [ANSWER, ?a]
+      - count: [ISSUE, ?a, ?_, ?_]
+        as: ?n
+      - test: "?n > 3"
+    then:
+      - assert: [FEEDBACK-CAP, ?a, 3]
+
+  - id: R53
+    name: session-pattern
+    group: feedback
+    priority: 10
+    status: hypothesis
+    source: PLAN §6 draft
+    description: The same kind of issue appears in two or more answers.
+    if:
+      - fact: [ISSUE, ?a, ?criterion, ?kind]
+      - count: [ISSUE, ?_, ?criterion, ?kind]
+        as: ?n
+      - test: "?n >= 2"
+    then:
+      - assert: [SESSION-PATTERN, ?criterion, ?kind, ?n]
+    feedback:
+      criterion: session
+      polarity: note
+      text: The same issue came up in several answers — worth practicing on its own.

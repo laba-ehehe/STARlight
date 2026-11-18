@@ -118,7 +118,7 @@ class KnowledgeBase:
             missing = [v for v in c.uses() if v not in bound]
             if missing:
                 err(f"condition '{c.describe()}' uses unbound {missing}")
-            if c.kind in ("fact", "not"):
+            if c.kind in ("fact", "not", "count"):
                 self._check_pattern(c.pattern, err, concluded, from_condition=True)
             if c.kind == "fuzzy":
                 _, var, set_name = c.fuzzy
@@ -145,6 +145,9 @@ class KnowledgeBase:
                     err(f"span refers to {alias}, which no condition names with 'as'")
         if r.followup is not None and not r.followup.strip():
             err("empty follow-up text")
+        fb = r.feedback or {}
+        if fb.get("polarity") == "negative" and not str(fb.get("tip", "")).strip():
+            err("negative feedback has no tip (R52: every negative item needs a concrete tip)")
         return out
 
     def _check_pattern(self, pattern: tuple, err, concluded: set[str], *, from_condition: bool

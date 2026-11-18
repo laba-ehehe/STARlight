@@ -53,7 +53,8 @@ class ExplanationTrace:
     def record(self, rule: Rule, match: Match, strength: float,
                produced: Sequence[Fact], retracted: Sequence[Fact] = ()) -> Firing:
         firing = Firing(len(self.firings) + 1, rule.id, rule.name, dict(match.bindings),
-                        tuple(match.facts), strength, tuple(produced), tuple(retracted))
+                        tuple(match.facts) + tuple(match.counted), strength,
+                        tuple(produced), tuple(retracted))
         self.firings.append(firing)
         for fact in produced:
             self._producer.setdefault(fact.key, firing)

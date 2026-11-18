@@ -309,6 +309,13 @@ class InferenceEngine:
                 yield from self._prove_conditions(rule, i + 1,
                                                   {**b, cond.target: evaluate(cond.expr, b)},
                                                   depth, failures, steps)
+            case "count":
+                n = len({f.key for f, _ in self.wm.query(cond.pattern, b)})
+                if cond.target in b and b[cond.target] != n:
+                    fail(f"count is {n}, not {b[cond.target]}")
+                else:
+                    yield from self._prove_conditions(rule, i + 1, {**b, cond.target: n},
+                                                      depth, failures, steps)
             case "fuzzy":
                 value, var, set_name = cond.fuzzy
                 x = b[value] if is_var(value) else value
@@ -322,7 +329,7 @@ class InferenceEngine:
 def _condition_preds(rule: Rule) -> set[str]:
     preds = getattr(rule, "_cond_preds", None)
     if preds is None:
-        preds = {c.pattern[0] for c in rule.conditions if c.kind in ("fact", "not")}
+        preds = {c.pattern[0] for c in rule.conditions if c.kind in ("fact", "not", "count")}
         rule._cond_preds = preds
     return preds
 

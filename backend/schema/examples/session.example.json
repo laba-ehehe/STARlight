@@ -1,0 +1,113 @@
+{
+  "session": {
+    "id": "a1b2c3d4e5f6",
+    "created_at": "2026-11-17T15:04:05+00:00",
+    "format": "phone",
+    "duration_min": 15,
+    "elapsed_ms": 742000,
+    "status": "done",
+    "job_description": {
+      "source": "text",
+      "text": "Software engineering intern. Work closely with a cross-functional team.",
+      "cues": [
+        { "competency": "teamwork", "cue": "cross-functional", "matched": "cross-functional", "start": 46, "end": 62 }
+      ]
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "text": "Tell me about a time you worked on a team to meet a tight deadline.",
+        "competency": "teamwork",
+        "budget_ms": 600000,
+        "reason": "R2: JD mentions 'cross-functional'",
+        "answers": [
+          {
+            "turn": "q1.0",
+            "prompt": "Tell me about a time you worked on a team to meet a tight deadline.",
+            "followup": false,
+            "asked_at_ms": 40000,
+            "span": { "start_ms": 42000, "end_ms": 47000 },
+            "audio": "data/sessions/a1b2c3d4e5f6/q1.0.ogg",
+            "audio_offset_ms": 42000,
+            "transcript": {
+              "question_id": "q1",
+              "words": [
+                { "w": "Last", "start_ms": 42000, "end_ms": 42300, "p": 0.98 },
+                { "w": "spring,", "start_ms": 42300, "end_ms": 42800, "p": 0.97 },
+                { "w": "um,", "start_ms": 43000, "end_ms": 43300, "p": 0.81 },
+                { "w": "we", "start_ms": 43400, "end_ms": 43600, "p": 0.99 },
+                { "w": "shipped.", "start_ms": 46500, "end_ms": 47000, "p": 0.95 }
+              ]
+            },
+            "segments": [
+              { "label": "situation", "index": 0, "span": { "start_ms": 42000, "end_ms": 43300 }, "text": "Last spring, um,", "confidence": 0.7 },
+              { "label": "result", "index": 1, "span": { "start_ms": 43400, "end_ms": 47000 }, "text": "we shipped.", "confidence": 0.6 }
+            ],
+            "descriptors": {
+              "duration_s": 5.0,
+              "word_count": 5,
+              "pace_wpm": 60,
+              "filler_rate": 12.0,
+              "fillers": [{ "text": "um", "span": { "start_ms": 43000, "end_ms": 43300 } }],
+              "long_pauses": [{ "text": "2.9 s", "span": { "start_ms": 43600, "end_ms": 46500 } }],
+              "hedges": [],
+              "pronoun_ratio": 99,
+              "action_share": 0.0,
+              "conditional_share": 0.0,
+              "relevance": 0.4
+            }
+          },
+          {
+            "turn": "q1.1",
+            "prompt": "Take your time — can you walk me through it?",
+            "followup": true,
+            "asked_at_ms": 48000,
+            "span": null,
+            "audio": null,
+            "audio_offset_ms": null,
+            "transcript": null
+          }
+        ],
+        "followup_decisions": [
+          {
+            "after_turn": "q1.0",
+            "action": "followup",
+            "text": "Take your time — can you walk me through it?",
+            "rule_id": "R30",
+            "failed_subgoal": "(ANSWERED q1)",
+            "decision_ms": 3.2
+          }
+        ],
+        "ratings": {
+          "relevance": "adequate",
+          "clarity": "needs-work",
+          "organization": "needs-work",
+          "examples": "adequate"
+        },
+        "feedback": [
+          {
+            "criterion": "organization",
+            "polarity": "negative",
+            "text": "The answer was only a sentence or two.",
+            "tip": "Treat every behavioral question as a short story — situation, what you did, how it ended.",
+            "span": { "start_ms": 42000, "end_ms": 47000 },
+            "turn": "q1.0",
+            "rule_id": "R30",
+            "strength": 1.0,
+            "how": {
+              "fact": { "pred": "BARE-ANSWER", "args": ["q1"], "span": { "start_ms": 42000, "end_ms": 47000 }, "certainty": 1.0, "source": "R30", "text": "(BARE-ANSWER q1)" },
+              "rule": "R30",
+              "rule_name": "bare-answer",
+              "strength": 1.0,
+              "because": [
+                { "fact": { "pred": "ANSWER", "args": ["q1"], "certainty": 1.0, "source": "M4", "text": "(ANSWER q1)" }, "observed_by": "M4" }
+              ]
+            },
+            "why_not": null
+          }
+        ]
+      }
+    ],
+    "patterns": []
+  }
+}

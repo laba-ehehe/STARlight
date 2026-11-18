@@ -1,0 +1,229 @@
+# Behavioral question bank (M2 Question Planner).
+#   id:          stable id, used in plans and reports
+#   competency:  teamwork | leadership | conflict | challenges | problem-solving
+#   text:        may use {role} and {company}; Question.render(context) fills them
+#   formats:     interview formats the question suits (phone | video | panel)
+#   difficulty:  1 (warm-up) – 3 (probing)
+#   academic:    true if a class, club or project example answers it well (R22)
+# Log changes in CHANGELOG.md.
+
+questions:
+  # ------------------------------------------------------------------ teamwork
+  - id: tw1
+    competency: teamwork
+    text: Tell me about a time you worked on a team to meet a tight deadline.
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: tw2
+    competency: teamwork
+    text: Describe a project where you had to rely on teammates with different skills from yours.
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: tw3
+    competency: teamwork
+    text: Tell me about a time a teammate was struggling. What did you do?
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: tw4
+    competency: teamwork
+    text: Give an example of how you kept a group aligned when people were working on separate pieces.
+    formats: [video, panel]
+    difficulty: 2
+    academic: true
+  - id: tw5
+    competency: teamwork
+    text: Tell me about a time you worked with people outside your own team to get something done.
+    formats: [phone, panel]
+    difficulty: 2
+    academic: false
+  - id: tw6
+    competency: teamwork
+    text: Describe a time you had to adjust how you worked to fit a team's way of doing things.
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: tw7
+    competency: teamwork
+    text: As a {role}, you would work with several teams at {company}. Tell me about a time collaboration made the result better than you could have alone.
+    formats: [panel]
+    difficulty: 3
+    academic: true
+
+  # ------------------------------------------------------------------ leadership
+  - id: ld1
+    competency: leadership
+    text: Tell me about a time you took the lead on something without being asked.
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: ld2
+    competency: leadership
+    text: Describe a time you had to motivate a group that had lost momentum.
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: ld3
+    competency: leadership
+    text: Tell me about a time you had to make a decision for a group without all the information you wanted.
+    formats: [video, panel]
+    difficulty: 3
+    academic: true
+  - id: ld4
+    competency: leadership
+    text: Give an example of when you helped someone else learn a skill or get up to speed.
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: ld5
+    competency: leadership
+    text: Describe a time you divided up work among people. How did you decide who did what?
+    formats: [phone, panel]
+    difficulty: 2
+    academic: true
+  - id: ld6
+    competency: leadership
+    text: Tell me about a time you proposed a change to how something was done and got others on board.
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: false
+  - id: ld7
+    competency: leadership
+    text: Tell me about a time you were responsible for an outcome that depended on other people's work.
+    formats: [panel]
+    difficulty: 3
+    academic: true
+
+  # ------------------------------------------------------------------ conflict
+  - id: cf1
+    competency: conflict
+    text: Tell me about a time you disagreed with a teammate. How did you handle it?
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: cf2
+    competency: conflict
+    text: Describe a time you had to work with someone whose style was very different from yours.
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: cf3
+    competency: conflict
+    text: Tell me about a time you received critical feedback. What did you do with it?
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: cf4
+    competency: conflict
+    text: Give an example of a time you had to push back on a request from someone senior to you.
+    formats: [video, panel]
+    difficulty: 3
+    academic: false
+  - id: cf5
+    competency: conflict
+    text: Tell me about a time a group member was not doing their share. What did you do?
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: cf6
+    competency: conflict
+    text: Describe a time you dealt with an upset customer, client or user.
+    formats: [phone, panel]
+    difficulty: 2
+    academic: false
+  - id: cf7
+    competency: conflict
+    text: Tell me about a time two people you worked with wanted different things and you had to find a way forward.
+    formats: [panel]
+    difficulty: 3
+    academic: true
+
+  # ------------------------------------------------------------------ challenges
+  - id: ch1
+    competency: challenges
+    text: Tell me about a time you had to learn something new very quickly.
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: ch2
+    competency: challenges
+    text: Describe a time you had several deadlines at once. How did you prioritize?
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: ch3
+    competency: challenges
+    text: Tell me about a time something went wrong at the last minute. What did you do?
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: ch4
+    competency: challenges
+    text: Tell me about a time you failed at something. What happened next?
+    formats: [phone, video, panel]
+    difficulty: 3
+    academic: true
+  - id: ch5
+    competency: challenges
+    text: Describe a time the requirements or plan changed partway through a project.
+    formats: [phone, panel]
+    difficulty: 2
+    academic: true
+  - id: ch6
+    competency: challenges
+    text: Give an example of a goal you set that was hard to reach. How did you get there?
+    formats: [video, panel]
+    difficulty: 2
+    academic: true
+  - id: ch7
+    competency: challenges
+    text: Tell me about the most stressful situation you have handled as a {role} or in school, and how you kept it under control.
+    formats: [panel]
+    difficulty: 3
+    academic: true
+
+  # ------------------------------------------------------------------ problem-solving
+  - id: ps1
+    competency: problem-solving
+    text: Tell me about a difficult problem you solved. How did you approach it?
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: ps2
+    competency: problem-solving
+    text: Describe a time you tracked down the cause of a bug or failure that others had missed.
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: ps3
+    competency: problem-solving
+    text: Tell me about a time you had to make sense of a problem with no clear instructions.
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: ps4
+    competency: problem-solving
+    text: Give an example of a time you used data to make a decision.
+    formats: [phone, video, panel]
+    difficulty: 2
+    academic: true
+  - id: ps5
+    competency: problem-solving
+    text: Describe a time you made a process faster or simpler.
+    formats: [phone, video, panel]
+    difficulty: 1
+    academic: true
+  - id: ps6
+    competency: problem-solving
+    text: Tell me about a time your first solution did not work. What did you try next?
+    formats: [video, panel]
+    difficulty: 3
+    academic: true
+  - id: ps7
+    competency: problem-solving
+    text: Tell me about a time you had to choose between two reasonable approaches. How did you decide?
+    formats: [panel]
+    difficulty: 3
+    academic: false
