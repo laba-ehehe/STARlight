@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/laba-ehehe/STARlight/schema/session-description.schema.json",
+  "title": "STARlight session description",
+  "description": "MPEG-7-style description of one practice session: Session DS → Question DS → Answer DS → Segment DS, with Feedback DS attached to answers. All times are integer milliseconds on the session timeline.",
+  "type": "object",
+  "required": ["session"],
+  "additionalProperties": false,
+  "properties": {
+    "session": { "$ref": "#/$defs/Session" }
+  },
+  "$defs": {
+    "Session": {
+      "type": "object",
+      "required": ["id", "created_at", "format", "duration_min", "job_description", "questions"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "created_at": { "type": "string", "format": "date-time" },
+        "format": { "enum": ["phone", "video", "panel"] },
+        "duration_min": { "type": "integer", "minimum": 15, "maximum": 60 },
+        "elapsed_ms": { "type": "integer", "minimum": 0 },
+        "job_description": {
+          "type": "object",
+          "required": ["source", "text"],
+          "additionalProperties": false,
+          "properties": {
+            "source": { "type": "string" },
+            "text": { "type": "string" },
+            "cues": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["competency", "cue"],
+                "properties": {
+                  "competency": { "$ref": "#/$defs/Competency" },
+                  "cue": { "type": "string" },
+                  "matched": { "type": "string" },
+                  "start": { "type": "integer" },
+                  "end": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "questions": { "type": "array", "items": { "$ref": "#/$defs/Question" } },
+        "patterns": {
+          "description": "R53: issues repeated across answers.",
+          "type": "array",
+          "items": { "$ref": "#/$defs/Feedback" }
+        },
+        "status": { "enum": ["planned", "live", "processing", "done", "failed"] }
+      }
+    },
+
+    "Question": {
+      "type": "object",
+      "required": ["id", "text", "competency", "budget_ms", "answers"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "text": { "type": "string", "minLength": 1 },
+        "competency": { "$ref": "#/$defs/Competency" },
+        "budget_ms": { "type": "integer", "minimum": 0 },
+        "reason": { "type": "string", "description": "Which planning rule chose it, e.g. 'R2: JD mentions team'." },
+        "answers": { "type": "array", "items": { "$ref": "#/$defs/Answer" } },
+        "ratings": { "$ref": "#/$defs/Ratings" },
+        "feedback": { "type": "array", "items": { "$ref": "#/$defs/Feedback" } },
+        "followup_decisions": { "type": "array", "items": { "$ref": "#/$defs/FollowUpDecision" } }
+      }
+    },
+
+    "Answer": {
+      "description": "One recorded turn: the main answer (q2.0) or a follow-up answer (q2.1, q2.2).",
+      "type": "object",
+      "required": ["turn", "prompt", "followup", "asked_at_ms", "span"],
+      "properties": {
+        "turn": { "type": "string", "pattern": "^[A-Za-z0-9_-]+\\.[0-9]+$" },
+        "prompt": { "type": "string" },
+        "followup": { "type": "boolean" },
+        "asked_at_ms": { "type": "integer", "minimum": 0 },
+        "span": { "oneOf": [{ "$ref": "#/$defs/TimeSpan" }, { "type": "null" }] },
+        "audio": { "type": ["string", "null"] },
+        "audio_offset_ms": { "type": ["integer", "null"], "minimum": 0 },
+        "transcript": { "oneOf": [{ "$ref": "#/$defs/Transcript" }, { "type": "null" }] },
+        "segments": { "type": "array", "items": { "$ref": "#/$defs/Segment" } },
+        "descriptors": { "$ref": "#/$defs/Descriptors" }
+      }
+    },
+
+    "Segment": {
+      "description": "A STAR part of an answer.",
+      "type": "object",
+      "required": ["label", "index", "span"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "enum": ["situation", "task", "action", "result", "other"] },
+        "index": { "type": "integer", "minimum": 0 },
+        "span": { "$ref": "#/$defs/TimeSpan" },
+        "text": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+
+    "Descriptors": {
+      "description": "Low-level audio and text descriptors measured by M4 and M5.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "duration_s": { "type": "number", "minimum": 0 },
+        "word_count": { "type": "integer", "minimum": 0 },
+        "pace_wpm": { "type": "number", "minimum": 0 },
+        "filler_rate": { "type": "number", "minimum": 0 },
+        "fillers": { "type": "array", "items": { "$ref": "#/$defs/Event" } },
+        "long_pauses": { "type": "array", "items": { "$ref": "#/$defs/Event" } },
+        "hedges": { "type": "array", "items": { "$ref": "#/$defs/Event" } },
+        "pronoun_ratio": { "type": "number", "minimum": 0 },
+        "action_share": { "type": "number", "minimum": 0, "maximum": 1 },
+        "conditional_share": { "type": "number", "minimum": 0, "maximum": 1 },
+        "relevance": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+
+    "Event": {
+      "type": "object",
+      "required": ["text", "span"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "span": { "$ref": "#/$defs/TimeSpan" }
+      }
+    },
+
+    "Ratings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "relevance": { "$ref": "#/$defs/Level" },
+        "clarity": { "$ref": "#/$defs/Level" },
+        "organization": { "$ref": "#/$defs/Level" },
+        "examples": { "$ref": "#/$defs/Level" }
+      }
+    },
+
+    "Feedback": {
+      "type": "object",
+      "required": ["criterion", "polarity", "text", "rule_id"],
+      "additionalProperties": false,
+      "properties": {
+        "criterion": { "enum": ["relevance", "clarity", "organization", "examples", "pacing", "session"] },
+        "polarity": { "enum": ["positive", "negative", "note"] },
+        "text": { "type": "string", "minLength": 1 },
+        "tip": { "type": ["string", "null"] },
+        "span": { "oneOf": [{ "$ref": "#/$defs/TimeSpan" }, { "type": "null" }] },
+        "turn": { "type": ["string", "null"] },
+        "rule_id": { "type": "string", "minLength": 1 },
+        "strength": { "type": "number", "minimum": 0, "maximum": 1 },
+        "how": { "$ref": "#/$defs/HowNode" },
+        "why_not": { "type": ["object", "null"] }
+      }
+    },
+
+    "FollowUpDecision": {
+      "type": "object",
+      "required": ["after_turn", "action"],
+      "additionalProperties": false,
+      "properties": {
+        "after_turn": { "type": "string" },
+        "action": { "enum": ["followup", "next", "end"] },
+        "text": { "type": ["string", "null"] },
+        "rule_id": { "type": ["string", "null"] },
+        "failed_subgoal": { "type": ["string", "null"] },
+        "decision_ms": { "type": "number", "minimum": 0 }
+      }
+    },
+
+    "HowNode": {
+      "type": "object",
+      "required": ["fact"],
+      "properties": {
+        "fact": { "$ref": "#/$defs/Fact" },
+        "rule": { "type": "string" },
+        "rule_name": { "type": "string" },
+        "strength": { "type": "number" },
+        "because": { "type": "array", "items": { "$ref": "#/$defs/HowNode" } },
+        "observed_by": { "type": "string" }
+      }
+    },
+
+    "Fact": {
+      "type": "object",
+      "required": ["pred", "args", "text"],
+      "properties": {
+        "pred": { "type": "string" },
+        "args": { "type": "array" },
+        "span": { "oneOf": [{ "$ref": "#/$defs/TimeSpan" }, { "type": "null" }] },
+        "certainty": { "type": "number", "minimum": 0, "maximum": 1 },
+        "source": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    },
+
+    "Transcript": {
+      "type": "object",
+      "required": ["words"],
+      "properties": {
+        "words": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["w", "start_ms", "end_ms"],
+            "additionalProperties": false,
+            "properties": {
+              "w": { "type": "string" },
+              "start_ms": { "type": "integer", "minimum": 0 },
+              "end_ms": { "type": "integer", "minimum": 0 },
+              "p": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        }
+      }
+    },
+
+    "TimeSpan": {
+      "type": "object",
+      "required": ["start_ms", "end_ms"],
+      "additionalProperties": false,
+      "properties": {
+        "start_ms": { "type": "integer", "minimum": 0 },
+        "end_ms": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "Competency": { "enum": ["teamwork", "leadership", "conflict", "challenges", "problem-solving"] },
+    "Level": { "enum": ["strong", "adequate", "needs-work"] }
+  }
+}

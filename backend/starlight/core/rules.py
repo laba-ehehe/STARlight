@@ -10,6 +10,9 @@ A rule's IF part is an ordered list of conditions, evaluated left to right:
                               membership degree of a value in a fuzzy set
   bind:  {?n: "floor((?d - 5) / 6)"}
                               compute a new variable
+  count: [ISSUE, ?a, clarity, ?_]
+         as: ?n               number of distinct matching facts (0 if none); the
+                              pattern's own variables stay local to the count
 
 The THEN part is a list of actions:
 
@@ -32,7 +35,7 @@ from .fuzzy import FuzzyVariable
 from .memory import WorkingMemory
 from .timespan import TimeSpan
 
-CONDITION_KINDS = ("fact", "not", "test", "fuzzy", "bind")
+CONDITION_KINDS = ("fact", "not", "test", "fuzzy", "bind", "count")
 
 
 class RuleError(ValueError):
@@ -61,6 +64,13 @@ class Condition:
                     raise RuleError(f"{kind} condition needs a non-empty list: {value!r}")
                 alias = _yaml_term(d["as"]) if "as" in d else None
                 return cls(kind, pattern=_yaml_terms(value), alias=alias)
+            case "count":
+                if not isinstance(value, Sequence) or isinstance(value, str) or not value:
+                    raise RuleError(f"count condition needs a non-empty list: {value!r}")
+                target = _yaml_term(d.get("as"))
+                if not is_var(target):
+                    raise RuleError(f"count condition needs 'as: ?var': {dict(d)}")
+                return cls(kind, pattern=_yaml_terms(value), target=target)
             case "test":
                 return cls(kind, expr=_test_to_expr(value))
             case "fuzzy":
@@ -80,7 +90,7 @@ class Condition:
         if self.kind == "fact":
             vs = [t for t in self.pattern if is_var(t) and t != WILDCARD]
             return vs + ([self.alias] if self.alias else [])
-        if self.kind == "bind":
+        if self.kind in ("bind", "count"):
             return [self.target]
         return []
 
@@ -106,6 +116,8 @@ class Condition:
                 return f"{var} {b.get(value, value)} is {set_name}"
             case "bind":
                 return f"{self.target} = {self.expr}"
+            case "count":
+                return f"{self.target} = COUNT {_pattern_str(substitute(self.pattern, b))}"
         return self.kind
 
 
@@ -133,6 +145,7 @@ class Match:
     facts: tuple[Fact, ...]                     # matched positive facts, in condition order
     aliases: Mapping[str, Fact] = field(default_factory=dict)
     degrees: tuple[tuple[str, float], ...] = ()  # (description, degree) for each fuzzy condition
+    counted: tuple[Fact, ...] = ()               # facts counted by count conditions (for HOW only)
 
     @property
     def key(self) -> tuple:
@@ -211,7 +224,7 @@ class Rule:
     def matches(self, wm: WorkingMemory, fuzzy_vars: Mapping[str, FuzzyVariable],
                 bindings: Mapping[str, Any] | None = None) -> Iterator[Match]:
         """Every complete match of the conditions against working memory."""
-        yield from self._walk(0, dict(bindings or {}), (), {}, (), wm, fuzzy_vars, None)
+        yield from self._walk(0, dict(bindings or {}), _Acc(), wm, fuzzy_vars, None)
 
     def strength(self, match: Match) -> float:
         fuzzy = min((d for _, d in match.degrees), default=1.0)
@@ -256,8 +269,7 @@ class Rule:
         failures: list[Failure] = []
         best_strength = None
         best_match = None
-        for m in self._walk(0, dict(bindings or {}), (), {}, (), wm, fuzzy_vars,
-                            failures.append):
+        for m in self._walk(0, dict(bindings or {}), _Acc(), wm, fuzzy_vars, failures.append):
             s = self.strength(m)
             if s >= threshold:
                 return None
@@ -275,11 +287,11 @@ class Rule:
 
     # ------------------------------------------------------------------ internals
 
-    def _walk(self, i: int, b: Bindings, facts: tuple, aliases: dict, degrees: tuple,
-              wm: WorkingMemory, fuzzy_vars: Mapping[str, FuzzyVariable],
+    def _walk(self, i: int, b: Bindings, acc: _Acc, wm: WorkingMemory,
+              fuzzy_vars: Mapping[str, FuzzyVariable],
               on_fail: Callable[[Failure], None] | None) -> Iterator[Match]:
         if i == len(self.conditions):
-            yield Match(self, b, facts, aliases, degrees)
+            yield Match(self, b, acc.facts, acc.aliases, acc.degrees, acc.counted)
             return
         cond = self.conditions[i]
 
@@ -287,28 +299,29 @@ class Rule:
             if on_fail:
                 on_fail(Failure(self.id, i, cond.describe(b), reason, blocking, bindings=b))
 
+        def go_on(b2: Bindings, acc2: _Acc = acc) -> Iterator[Match]:
+            return self._walk(i + 1, b2, acc2, wm, fuzzy_vars, on_fail)
+
         match cond.kind:
             case "fact":
                 found = wm.query(cond.pattern, b)
                 if not found:
                     fail(f"no fact matches {cond.describe(b)}")
                 for fact, b2 in found:
-                    new_aliases = {**aliases, cond.alias: fact} if cond.alias else aliases
+                    aliases = acc.aliases
                     if cond.alias:
+                        aliases = {**aliases, cond.alias: fact}
                         b2 = {**b2, cond.alias: fact.key}
-                    yield from self._walk(i + 1, b2, facts + (fact,), new_aliases, degrees,
-                                          wm, fuzzy_vars, on_fail)
+                    yield from go_on(b2, acc.add(facts=(fact,), aliases=aliases))
             case "not":
                 found = wm.query(cond.pattern, b)
                 if found:
                     fail(f"found {found[0][0]}", blocking=found[0][0])
                 else:
-                    yield from self._walk(i + 1, b, facts, aliases, degrees, wm, fuzzy_vars,
-                                          on_fail)
+                    yield from go_on(b)
             case "test":
                 if evaluate(cond.expr, b):
-                    yield from self._walk(i + 1, b, facts, aliases, degrees, wm, fuzzy_vars,
-                                          on_fail)
+                    yield from go_on(b)
                 else:
                     shown = ", ".join(f"{v} = {_fmt(b[v])}" for v in variables_in(cond.expr)
                                       if v in b)
@@ -320,9 +333,7 @@ class Rule:
                     raise RuleError(f"rule {self.id}: unknown fuzzy variable {var_name!r}")
                 degree = fuzzy_vars[var_name].degree(set_name, float(x))
                 if degree > 0:
-                    yield from self._walk(i + 1, b, facts, aliases,
-                                          degrees + ((cond.describe(b), degree),),
-                                          wm, fuzzy_vars, on_fail)
+                    yield from go_on(b, acc.add(degrees=((cond.describe(b), degree),)))
                 else:
                     fail(f"{var_name} {_fmt(x)} is not {set_name} (degree 0)")
             case "bind":
@@ -330,8 +341,14 @@ class Rule:
                 if cond.target in b and b[cond.target] != value:
                     fail(f"{cond.target} is {b[cond.target]}, not {value}")
                 else:
-                    yield from self._walk(i + 1, {**b, cond.target: value}, facts, aliases,
-                                          degrees, wm, fuzzy_vars, on_fail)
+                    yield from go_on({**b, cond.target: value})
+            case "count":
+                counted = tuple({f.key: f for f, _ in wm.query(cond.pattern, b)}.values())
+                n = len(counted)
+                if cond.target in b and b[cond.target] != n:
+                    fail(f"{cond.describe(b)} is {n}, not {b[cond.target]}")
+                else:
+                    yield from go_on({**b, cond.target: n}, acc.add(counted=counted))
 
     def to_dict(self) -> dict:
         return {"id": self.id, "name": self.name, "group": self.group,
@@ -341,6 +358,20 @@ class Rule:
 
     def __repr__(self) -> str:
         return f"Rule({self.id} {self.name!r}, group={self.group!r}, priority={self.priority})"
+
+
+@dataclass(frozen=True)
+class _Acc:
+    """What a partial match has collected so far."""
+    facts: tuple[Fact, ...] = ()
+    aliases: Mapping[str, Fact] = field(default_factory=dict)
+    degrees: tuple[tuple[str, float], ...] = ()
+    counted: tuple[Fact, ...] = ()
+
+    def add(self, *, facts: tuple = (), aliases: Mapping[str, Fact] | None = None,
+            degrees: tuple = (), counted: tuple = ()) -> _Acc:
+        return _Acc(self.facts + facts, self.aliases if aliases is None else aliases,
+                    self.degrees + degrees, self.counted + counted)
 
 
 def _yaml_term(t: Any) -> Any:

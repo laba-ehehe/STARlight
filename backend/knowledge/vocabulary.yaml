@@ -8,6 +8,7 @@ predicates:
   JD-CUE:              {args: [competency, cue], producer: M1}
   INTERVIEW-FORMAT:    {args: [format], producer: M1}
   SESSION-DURATION:    {args: [minutes], producer: M1}
+  EARLY-CAREER-CUE:    {args: [cue], producer: M1}
 
   # ---- question planning (M2 + planning rules)
   TARGET-COMPETENCY:   {args: [competency, level], producer: rules}
@@ -15,6 +16,9 @@ predicates:
   QUESTION-BUDGET:     {args: [ms], producer: rules}
   PLANNED:             {args: [qid, competency], producer: M2}
   BLOCK-COMPETENCY:    {args: [competency], producer: rules}
+  COMPETENCY:          {args: [competency], producer: M2}
+  CUE-WEIGHT:          {args: [competency, n], producer: rules}
+  PREFER-EXAMPLES:     {args: [kind], producer: rules}
 
   # ---- live session state (M8 / Session)
   QUESTION:            {args: [qid, competency], producer: M2}
@@ -22,6 +26,7 @@ predicates:
   ELAPSED:             {args: [qid, ms], producer: M8}
   TIME-LEFT:           {args: [ms], producer: M8}
   FOLLOWUPS-ASKED:     {args: [qid, n], producer: M8}
+  NEXT-QUESTION:       {args: [qid], producer: M8}
 
   # ---- speech facts (M4 Speech Processor); one answer = all turns of a question
   ANSWER:              {args: [qid], producer: M4}
@@ -44,6 +49,11 @@ predicates:
   HEDGE:               {args: [qid, phrase, at_ms], producer: M5}
   REFLECTION:          {args: [qid], producer: M5}
   STORY-COUNT:         {args: [qid, n], producer: M5}
+  SITUATION-SHARE:     {args: [qid, share], producer: M5}
+  GENERIC-CLAIM:       {args: [qid, phrase, at_ms], producer: M5}
+  BLAME-CUE:           {args: [qid, phrase, at_ms], producer: M5}
+  NEGATIVE-OUTCOME:    {args: [qid, text], producer: M5}
+  INITIATIVE-VERB:     {args: [qid, verb, at_ms], producer: M5}
 
   # ---- conclusions from answer-analysis and delivery rules
   MISSING-CONTEXT:     {args: [qid], producer: rules}
@@ -57,20 +67,39 @@ predicates:
   TOO-LONG:            {args: [qid], producer: rules}
   CLARITY-ISSUE:       {args: [qid, kind, at_ms], producer: rules}
   OVER-BUDGET:         {args: [qid], producer: rules}
+  BARE-ANSWER:         {args: [qid], producer: rules}
+  WELL-STRUCTURED:     {args: [qid], producer: rules}
+  MULTIPLE-EXAMPLES:   {args: [qid], producer: rules}
+  GENERIC-ANSWER:      {args: [qid], producer: rules}
+  BLAME-FRAMING:       {args: [qid], producer: rules}
+  MISSING-LESSON:      {args: [qid], producer: rules}
+  WEAK-COMPETENCY-EVIDENCE: {args: [qid], producer: rules}
+  LONG-SETUP:          {args: [qid], producer: rules}
+
+  # ---- session control conclusions
   SKIP-FOLLOWUP:       {args: [qid, reason], producer: rules}
+  FOLLOWUP-CAP:        {args: [n], producer: rules}
+  GO-TO-CLOSING:       {args: [next_qid], producer: rules}
+
+  # ---- ratings (rating group): level is strong | adequate | needs-work
+  RATING:              {args: [qid, criterion, level], producer: rules}
 
   # ---- feedback bookkeeping
   ISSUE:               {args: [qid, criterion, kind], producer: rules}
   STRENGTH:            {args: [qid, criterion, kind], producer: rules}
   LEAD-STRENGTH:       {args: [qid, criterion, kind], producer: rules}
+  FEEDBACK-CAP:        {args: [qid, n], producer: rules}
+  SESSION-PATTERN:     {args: [criterion, kind, answers], producer: rules}
 
   # ---- backward-chaining goals (R16)
   COMPLETE:            {args: [qid], producer: rules}
+  ANSWERED:            {args: [qid], producer: rules}
   ON-TOPIC:            {args: [qid], producer: rules}
   REAL-EXAMPLE:        {args: [qid], producer: rules}
   CLEAR-OWNERSHIP:     {args: [qid], producer: rules}
   RESULT-STATED:       {args: [qid], producer: rules}
   RESULT-SUPPORTED:    {args: [qid], producer: rules}
+  LESSON-STATED:       {args: [qid], producer: rules}
 
 # Pairs of conclusions that must never both be drawn from the same facts.
 contradictions:
@@ -80,3 +109,6 @@ contradictions:
   - [RESULT-STATED, MISSING-RESULT]
   - [RESULT-SUPPORTED, UNSUPPORTED-RESULT]
   - [TOO-SHORT, TOO-LONG]
+  - [ANSWERED, BARE-ANSWER]
+  - [REAL-EXAMPLE, GENERIC-ANSWER]
+  - [LESSON-STATED, MISSING-LESSON]

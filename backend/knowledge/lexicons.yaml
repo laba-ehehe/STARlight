@@ -1,0 +1,357 @@
+# Word lists the extractors use to turn text into facts.
+#   M1 (JD Analyzer):     competencies, early_career   → JD-CUE, EARLY-CAREER-CUE
+#   M4 (Speech):          fillers                       → FILLER
+#   M5 (Content):         everything else               → STAR-SEGMENT, HEDGE, REFLECTION, ...
+#
+# Matching (TextDocument.find_cues and M5): case-insensitive, whole words; a hyphen
+# and a space are interchangeable ("cross-functional" = "cross functional"), and
+# common suffixes are allowed (s, es, ed, d, ing, ership), so "lead" also matches
+# "leading" and "leadership". Multi-word phrases match as written.
+# Log changes in CHANGELOG.md.
+
+competencies:
+  teamwork:
+    - team
+    - teammate
+    - collaborate
+    - collaborative
+    - collaboration
+    - cross-functional
+    - work closely with
+    - partner with
+    - stakeholder
+    - interpersonal
+    - communicate
+    - communication skills
+    - coordinate
+    - pair programming
+    - code review
+    - agile
+    - scrum
+    - together
+  leadership:
+    - lead
+    - leader
+    - mentor
+    - coach
+    - ownership
+    - own
+    - drive
+    - initiative
+    - self-starter
+    - take charge
+    - guide
+    - influence
+    - motivate
+    - delegate
+    - manage
+    - supervise
+    - represent
+  conflict:
+    - conflict
+    - negotiate
+    - resolve
+    - resolution
+    - disagreement
+    - difficult customer
+    - difficult conversation
+    - customer-facing
+    - client-facing
+    - de-escalate
+    - mediate
+    - compromise
+    - diplomacy
+    - competing priorities
+    - push back
+    - feedback
+  challenges:
+    - fast-paced
+    - deadline
+    - pressure
+    - adapt
+    - adaptable
+    - flexible
+    - flexibility
+    - changing priorities
+    - dynamic
+    - ambiguity
+    - resilient
+    - resilience
+    - multitask
+    - tight timeline
+    - learn quickly
+    - quick learner
+    - startup
+  problem-solving:
+    - problem-solving
+    - problem solver
+    - analyze
+    - analytical
+    - debug
+    - troubleshoot
+    - root cause
+    - investigate
+    - diagnose
+    - optimize
+    - ambiguous
+    - critical thinking
+    - data-driven
+    - design solutions
+    - solve
+    - improve
+    - evaluate
+
+# R22: the role is for students or recent graduates.
+early_career:
+  - intern
+  - internship
+  - co-op
+  - student
+  - new grad
+  - new graduate
+  - recent graduate
+  - entry-level
+  - early career
+  - junior
+  - university
+  - currently enrolled
+
+# M4: filler words. "like" counts only when spaCy tags it as an interjection (INTJ).
+fillers:
+  - um
+  - umm
+  - uh
+  - uhh
+  - erm
+  - er
+  - hmm
+  - mm
+  - you know
+  - I mean
+  - sort of
+  - like
+  - basically
+  - literally
+  - so yeah
+
+# M5 → HEDGE (R43)
+hedges:
+  - I think
+  - I guess
+  - I feel like
+  - kind of
+  - kinda
+  - sort of
+  - maybe
+  - probably
+  - I'm not sure
+  - I believe
+  - somewhat
+  - a little bit
+  - try to
+  - tried to
+  - hopefully
+  - I suppose
+
+# M5 StarSegmenter: cue phrases that add to a sentence's score for each label.
+# Grammar features and position priors are added in code (see PLAN §5 M5).
+star_cues:
+  situation:
+    - when I was
+    - while I was
+    - at my internship
+    - during my internship
+    - last semester
+    - last summer
+    - last year
+    - in my junior year
+    - in my sophomore year
+    - in one of my classes
+    - for a class project
+    - in my capstone
+    - at my previous job
+    - we were working on
+    - there was a time
+    - the situation was
+    - the company
+    - our team was
+  task:
+    - my role was
+    - my job was
+    - I was responsible for
+    - I was in charge of
+    - I was tasked with
+    - I was asked to
+    - I needed to
+    - I had to
+    - the goal was
+    - our goal was
+    - the challenge was
+    - the problem was
+    - we needed to
+    - it was my responsibility
+  action:
+    - so I
+    - first, I
+    - then I
+    - next, I
+    - after that, I
+    - I decided to
+    - I started
+    - I reached out
+    - I set up
+    - I scheduled
+    - I proposed
+    - I organized
+    - I wrote
+    - I built
+    - I talked to
+    - I suggested
+    - I broke down
+  result:
+    - as a result
+    - in the end
+    - eventually
+    - ultimately
+    - the outcome was
+    - the result was
+    - we shipped
+    - we launched
+    - we delivered
+    - we finished
+    - it worked
+    - which led to
+    - that meant
+    - I learned
+    - my manager
+    - the client
+
+# M5 → STAKEHOLDER-REACTION (R8): evidence the result was real besides a number.
+result_evidence:
+  - increased
+  - decreased
+  - reduced
+  - improved
+  - saved
+  - cut
+  - grew
+  - doubled
+  - tripled
+  - faster
+  - on time
+  - ahead of schedule
+  - adopted
+  - praised
+  - thanked
+  - my manager said
+  - my professor said
+  - the client said
+  - got an A
+  - won
+  - promoted
+  - offered me
+
+# M5 → INITIATIVE-VERB (R37): verbs that show leading.
+initiative_verbs:
+  - led
+  - organized
+  - proposed
+  - decided
+  - initiated
+  - started
+  - launched
+  - founded
+  - spearheaded
+  - coordinated
+  - delegated
+  - mentored
+  - coached
+  - convinced
+  - persuaded
+  - volunteered
+  - took charge
+  - took the lead
+  - set up
+  - created
+
+# M5 → BLAME-CUE (R35)
+blame_cues:
+  - his fault
+  - her fault
+  - their fault
+  - they didn't
+  - he didn't
+  - she didn't
+  - they never
+  - he never
+  - she never
+  - they refused
+  - wasn't my fault
+  - blamed
+  - lazy
+  - didn't do anything
+  - didn't pull their weight
+  - incompetent
+
+# M5 → GENERIC-CLAIM (R34): statements about habits instead of one event.
+generic_claims:
+  - I always
+  - I usually
+  - I tend to
+  - I typically
+  - I generally
+  - I'm a hard worker
+  - I'm a team player
+  - I'm a people person
+  - I'm very organized
+  - I'm a perfectionist
+  - I'm good at
+  - whenever I
+  - in general
+  - every time
+
+# M5 → NEGATIVE-OUTCOME (R36), looked for in the Result segment.
+negative_outcomes:
+  - failed
+  - missed
+  - didn't work
+  - didn't get
+  - lost
+  - fell behind
+  - over budget
+  - got cancelled
+  - got canceled
+  - wasn't able to
+  - couldn't finish
+  - fell through
+  - rejected
+
+# M5 → REFLECTION (R32, R36)
+reflection:
+  - I learned
+  - I realized
+  - lesson
+  - taught me
+  - looking back
+  - in hindsight
+  - next time
+  - since then
+  - now I
+  - if I did it again
+  - I would do differently
+  - it showed me
+  - I grew
+
+# M5 PRONOUN-RATIO (R6, R38): counted in the Action segment.
+pronouns:
+  first_singular: [I, me, my, mine, myself]
+  first_plural: [we, us, our, ours, ourselves]
+
+# M5 CONDITIONAL-SHARE (R9): modal forms that make an action hypothetical.
+conditional_markers:
+  - would
+  - "'d"
+  - could
+  - should
+  - might
+  - I'd probably
