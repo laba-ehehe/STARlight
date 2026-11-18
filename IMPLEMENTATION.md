@@ -130,6 +130,18 @@ goals:
 
 ## Phase 3 — Extractors (start as soon as core stubs merge, 11/17)
 
+Built in five stages, one PR each:
+
+| Stage | Contents | Steps |
+|---|---|---|
+| 3A | shared `starlight/lexicon.py` phrase matcher; M4 `DeliveryAnalyzer` + `speech_facts` | 4.2, 4.3 |
+| 3B | M4 `SpeechTranscriber` (faster-whisper), synthetic test audio, Whisper benchmark | 0.4, 4.1 |
+| 3C | M5 `StarSegmenter`; spaCy in CI | 5.1 |
+| 3D | M5 `ContentAnalyzer` + `content_facts`; the 5 fixtures through M4 + M5 + rules pick the expected follow-up | 5.2, 5.3 |
+| 3E | M1 `JobDescriptionAnalyzer` + sample JD fixtures | 1a, 1b |
+
+Recording the 10 validation samples (4.4) and the STAR accuracy check (5.4) need real voices and go with Phase 8.
+
 ### M4 Speech Processor — Bhavana (11/17 – 11/20)
 | Step | Build | Done when |
 |---|---|---|

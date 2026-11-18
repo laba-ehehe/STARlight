@@ -35,7 +35,6 @@ competencies:
     - mentor
     - coach
     - ownership
-    - own
     - drive
     - initiative
     - self-starter
@@ -116,7 +115,9 @@ early_career:
   - university
   - currently enrolled
 
-# M4: filler words. "like" counts only when spaCy tags it as an interjection (INTJ).
+# M4: filler words. "like" counts only when spaCy tags it as an interjection (INTJ),
+# or, without spaCy, when a comma sets it off ("it was, like, hard").
+# "sort of" / "kind of" are hedges (below), not fillers.
 fillers:
   - um
   - umm
@@ -128,7 +129,6 @@ fillers:
   - mm
   - you know
   - I mean
-  - sort of
   - like
   - basically
   - literally
