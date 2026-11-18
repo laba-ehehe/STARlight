@@ -1,0 +1,512 @@
+{
+ "question_id": "q1",
+ "question": "Tell me about a time you worked on a team under a tight deadline.",
+ "competency": "teamwork",
+ "offset_ms": 42000,
+ "words": [
+  {
+   "w": "Last",
+   "start_ms": 42000,
+   "end_ms": 42376,
+   "p": 0.95
+  },
+  {
+   "w": "fall,",
+   "start_ms": 42376,
+   "end_ms": 42776,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 42776,
+   "end_ms": 43080,
+   "p": 0.95
+  },
+  {
+   "w": "was",
+   "start_ms": 43080,
+   "end_ms": 43432,
+   "p": 0.95
+  },
+  {
+   "w": "on",
+   "start_ms": 43432,
+   "end_ms": 43760,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 43760,
+   "end_ms": 44064,
+   "p": 0.95
+  },
+  {
+   "w": "three-person",
+   "start_ms": 44064,
+   "end_ms": 44584,
+   "p": 0.95
+  },
+  {
+   "w": "team",
+   "start_ms": 44584,
+   "end_ms": 44960,
+   "p": 0.95
+  },
+  {
+   "w": "for",
+   "start_ms": 44960,
+   "end_ms": 45312,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 45312,
+   "end_ms": 45616,
+   "p": 0.95
+  },
+  {
+   "w": "hackathon,",
+   "start_ms": 45616,
+   "end_ms": 46136,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 46136,
+   "end_ms": 46488,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 46488,
+   "end_ms": 46792,
+   "p": 0.95
+  },
+  {
+   "w": "was",
+   "start_ms": 46792,
+   "end_ms": 47144,
+   "p": 0.95
+  },
+  {
+   "w": "in",
+   "start_ms": 47144,
+   "end_ms": 47472,
+   "p": 0.95
+  },
+  {
+   "w": "charge",
+   "start_ms": 47472,
+   "end_ms": 47896,
+   "p": 0.95
+  },
+  {
+   "w": "of",
+   "start_ms": 47896,
+   "end_ms": 48224,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 48224,
+   "end_ms": 48576,
+   "p": 0.95
+  },
+  {
+   "w": "data",
+   "start_ms": 48576,
+   "end_ms": 48952,
+   "p": 0.95
+  },
+  {
+   "w": "pipeline.",
+   "start_ms": 48952,
+   "end_ms": 49448,
+   "p": 0.95
+  },
+  {
+   "w": "We",
+   "start_ms": 49628,
+   "end_ms": 49956,
+   "p": 0.95
+  },
+  {
+   "w": "had",
+   "start_ms": 49956,
+   "end_ms": 50308,
+   "p": 0.95
+  },
+  {
+   "w": "twenty-four",
+   "start_ms": 50308,
+   "end_ms": 50828,
+   "p": 0.95
+  },
+  {
+   "w": "hours",
+   "start_ms": 50828,
+   "end_ms": 51228,
+   "p": 0.95
+  },
+  {
+   "w": "to",
+   "start_ms": 51228,
+   "end_ms": 51556,
+   "p": 0.95
+  },
+  {
+   "w": "build",
+   "start_ms": 51556,
+   "end_ms": 51956,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 51956,
+   "end_ms": 52260,
+   "p": 0.95
+  },
+  {
+   "w": "dashboard",
+   "start_ms": 52260,
+   "end_ms": 52756,
+   "p": 0.95
+  },
+  {
+   "w": "for",
+   "start_ms": 52756,
+   "end_ms": 53108,
+   "p": 0.95
+  },
+  {
+   "w": "campus",
+   "start_ms": 53108,
+   "end_ms": 53532,
+   "p": 0.95
+  },
+  {
+   "w": "bus",
+   "start_ms": 53532,
+   "end_ms": 53884,
+   "p": 0.95
+  },
+  {
+   "w": "delays.",
+   "start_ms": 53884,
+   "end_ms": 54332,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 54512,
+   "end_ms": 54816,
+   "p": 0.95
+  },
+  {
+   "w": "wrote",
+   "start_ms": 54816,
+   "end_ms": 55216,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 55216,
+   "end_ms": 55520,
+   "p": 0.95
+  },
+  {
+   "w": "scraper",
+   "start_ms": 55520,
+   "end_ms": 55968,
+   "p": 0.95
+  },
+  {
+   "w": "for",
+   "start_ms": 55968,
+   "end_ms": 56320,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 56320,
+   "end_ms": 56672,
+   "p": 0.95
+  },
+  {
+   "w": "transit",
+   "start_ms": 56672,
+   "end_ms": 57120,
+   "p": 0.95
+  },
+  {
+   "w": "feed,",
+   "start_ms": 57120,
+   "end_ms": 57520,
+   "p": 0.95
+  },
+  {
+   "w": "cleaned",
+   "start_ms": 57520,
+   "end_ms": 57968,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 57968,
+   "end_ms": 58320,
+   "p": 0.95
+  },
+  {
+   "w": "timestamps,",
+   "start_ms": 58320,
+   "end_ms": 58840,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 58840,
+   "end_ms": 59192,
+   "p": 0.95
+  },
+  {
+   "w": "loaded",
+   "start_ms": 59192,
+   "end_ms": 59616,
+   "p": 0.95
+  },
+  {
+   "w": "everything",
+   "start_ms": 59616,
+   "end_ms": 60136,
+   "p": 0.95
+  },
+  {
+   "w": "into",
+   "start_ms": 60136,
+   "end_ms": 60512,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 60512,
+   "end_ms": 60816,
+   "p": 0.95
+  },
+  {
+   "w": "small",
+   "start_ms": 60816,
+   "end_ms": 61216,
+   "p": 0.95
+  },
+  {
+   "w": "database.",
+   "start_ms": 61216,
+   "end_ms": 61712,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 61892,
+   "end_ms": 62196,
+   "p": 0.95
+  },
+  {
+   "w": "also",
+   "start_ms": 62196,
+   "end_ms": 62572,
+   "p": 0.95
+  },
+  {
+   "w": "set",
+   "start_ms": 62572,
+   "end_ms": 62924,
+   "p": 0.95
+  },
+  {
+   "w": "up",
+   "start_ms": 62924,
+   "end_ms": 63252,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 63252,
+   "end_ms": 63604,
+   "p": 0.95
+  },
+  {
+   "w": "charts",
+   "start_ms": 63604,
+   "end_ms": 64028,
+   "p": 0.95
+  },
+  {
+   "w": "in",
+   "start_ms": 64028,
+   "end_ms": 64356,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 64356,
+   "end_ms": 64708,
+   "p": 0.95
+  },
+  {
+   "w": "dashboard",
+   "start_ms": 64708,
+   "end_ms": 65204,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 65204,
+   "end_ms": 65556,
+   "p": 0.95
+  },
+  {
+   "w": "helped",
+   "start_ms": 65556,
+   "end_ms": 65980,
+   "p": 0.95
+  },
+  {
+   "w": "my",
+   "start_ms": 65980,
+   "end_ms": 66308,
+   "p": 0.95
+  },
+  {
+   "w": "teammate",
+   "start_ms": 66308,
+   "end_ms": 66780,
+   "p": 0.95
+  },
+  {
+   "w": "debug",
+   "start_ms": 66780,
+   "end_ms": 67180,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 67180,
+   "end_ms": 67532,
+   "p": 0.95
+  },
+  {
+   "w": "map",
+   "start_ms": 67532,
+   "end_ms": 67884,
+   "p": 0.95
+  },
+  {
+   "w": "view.",
+   "start_ms": 67884,
+   "end_ms": 68284,
+   "p": 0.95
+  },
+  {
+   "w": "There",
+   "start_ms": 68464,
+   "end_ms": 68864,
+   "p": 0.95
+  },
+  {
+   "w": "were",
+   "start_ms": 68864,
+   "end_ms": 69240,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 69240,
+   "end_ms": 69544,
+   "p": 0.95
+  },
+  {
+   "w": "lot",
+   "start_ms": 69544,
+   "end_ms": 69896,
+   "p": 0.95
+  },
+  {
+   "w": "of",
+   "start_ms": 69896,
+   "end_ms": 70224,
+   "p": 0.95
+  },
+  {
+   "w": "late",
+   "start_ms": 70224,
+   "end_ms": 70600,
+   "p": 0.95
+  },
+  {
+   "w": "nights",
+   "start_ms": 70600,
+   "end_ms": 71024,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 71024,
+   "end_ms": 71376,
+   "p": 0.95
+  },
+  {
+   "w": "we",
+   "start_ms": 71376,
+   "end_ms": 71704,
+   "p": 0.95
+  },
+  {
+   "w": "had",
+   "start_ms": 71704,
+   "end_ms": 72056,
+   "p": 0.95
+  },
+  {
+   "w": "to",
+   "start_ms": 72056,
+   "end_ms": 72384,
+   "p": 0.95
+  },
+  {
+   "w": "coordinate",
+   "start_ms": 72384,
+   "end_ms": 72904,
+   "p": 0.95
+  },
+  {
+   "w": "who",
+   "start_ms": 72904,
+   "end_ms": 73256,
+   "p": 0.95
+  },
+  {
+   "w": "was",
+   "start_ms": 73256,
+   "end_ms": 73608,
+   "p": 0.95
+  },
+  {
+   "w": "working",
+   "start_ms": 73608,
+   "end_ms": 74056,
+   "p": 0.95
+  },
+  {
+   "w": "on",
+   "start_ms": 74056,
+   "end_ms": 74384,
+   "p": 0.95
+  },
+  {
+   "w": "what.",
+   "start_ms": 74384,
+   "end_ms": 74784,
+   "p": 0.95
+  }
+ ]
+}

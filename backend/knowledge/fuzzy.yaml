@@ -1,0 +1,19 @@
+# Fuzzy sets (Milestone #2, "Fuzzy membership functions").
+# Trapezoid [a, b, c, d]: 0 below a, rising to 1 at b, 1 until c, falling to 0 at d.
+# A rule using a fuzzy set fires with strength = membership degree; it fires only if >= 0.5.
+# Log every change in CHANGELOG.md.
+
+variables:
+  answer_duration:
+    unit: s
+    sets:
+      SHORT: [0, 0, 60, 90]
+      IDEAL: [60, 90, 150, 180]
+      LONG:  [150, 180, .inf, .inf]
+
+  pace:
+    unit: words/min
+    sets:
+      SLOW:   [0, 0, 100, 120]
+      NORMAL: [110, 130, 160, 175]
+      FAST:   [160, 180, .inf, .inf]

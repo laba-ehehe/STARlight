@@ -1,0 +1,482 @@
+{
+ "question_id": "q1",
+ "question": "Tell me about a time you worked on a team under a tight deadline.",
+ "competency": "teamwork",
+ "offset_ms": 42000,
+ "words": [
+  {
+   "w": "In",
+   "start_ms": 42000,
+   "end_ms": 42328,
+   "p": 0.95
+  },
+  {
+   "w": "my",
+   "start_ms": 42328,
+   "end_ms": 42656,
+   "p": 0.95
+  },
+  {
+   "w": "internship",
+   "start_ms": 42656,
+   "end_ms": 43176,
+   "p": 0.95
+  },
+  {
+   "w": "last",
+   "start_ms": 43176,
+   "end_ms": 43552,
+   "p": 0.95
+  },
+  {
+   "w": "summer,",
+   "start_ms": 43552,
+   "end_ms": 44000,
+   "p": 0.95
+  },
+  {
+   "w": "our",
+   "start_ms": 44000,
+   "end_ms": 44352,
+   "p": 0.95
+  },
+  {
+   "w": "team",
+   "start_ms": 44352,
+   "end_ms": 44728,
+   "p": 0.95
+  },
+  {
+   "w": "had",
+   "start_ms": 44728,
+   "end_ms": 45080,
+   "p": 0.95
+  },
+  {
+   "w": "to",
+   "start_ms": 45080,
+   "end_ms": 45408,
+   "p": 0.95
+  },
+  {
+   "w": "ship",
+   "start_ms": 45408,
+   "end_ms": 45784,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 45784,
+   "end_ms": 46088,
+   "p": 0.95
+  },
+  {
+   "w": "payments",
+   "start_ms": 46088,
+   "end_ms": 46560,
+   "p": 0.95
+  },
+  {
+   "w": "feature",
+   "start_ms": 46560,
+   "end_ms": 47008,
+   "p": 0.95
+  },
+  {
+   "w": "in",
+   "start_ms": 47008,
+   "end_ms": 47336,
+   "p": 0.95
+  },
+  {
+   "w": "three",
+   "start_ms": 47336,
+   "end_ms": 47736,
+   "p": 0.95
+  },
+  {
+   "w": "weeks.",
+   "start_ms": 47736,
+   "end_ms": 48160,
+   "p": 0.95
+  },
+  {
+   "w": "We",
+   "start_ms": 48340,
+   "end_ms": 48668,
+   "p": 0.95
+  },
+  {
+   "w": "split",
+   "start_ms": 48668,
+   "end_ms": 49068,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 49068,
+   "end_ms": 49420,
+   "p": 0.95
+  },
+  {
+   "w": "work",
+   "start_ms": 49420,
+   "end_ms": 49796,
+   "p": 0.95
+  },
+  {
+   "w": "into",
+   "start_ms": 49796,
+   "end_ms": 50172,
+   "p": 0.95
+  },
+  {
+   "w": "tickets",
+   "start_ms": 50172,
+   "end_ms": 50620,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 50620,
+   "end_ms": 50972,
+   "p": 0.95
+  },
+  {
+   "w": "we",
+   "start_ms": 50972,
+   "end_ms": 51300,
+   "p": 0.95
+  },
+  {
+   "w": "met",
+   "start_ms": 51300,
+   "end_ms": 51652,
+   "p": 0.95
+  },
+  {
+   "w": "every",
+   "start_ms": 51652,
+   "end_ms": 52052,
+   "p": 0.95
+  },
+  {
+   "w": "morning.",
+   "start_ms": 52052,
+   "end_ms": 52524,
+   "p": 0.95
+  },
+  {
+   "w": "We",
+   "start_ms": 52704,
+   "end_ms": 53032,
+   "p": 0.95
+  },
+  {
+   "w": "built",
+   "start_ms": 53032,
+   "end_ms": 53432,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 53432,
+   "end_ms": 53784,
+   "p": 0.95
+  },
+  {
+   "w": "API,",
+   "start_ms": 53784,
+   "end_ms": 54160,
+   "p": 0.95
+  },
+  {
+   "w": "we",
+   "start_ms": 54160,
+   "end_ms": 54488,
+   "p": 0.95
+  },
+  {
+   "w": "wrote",
+   "start_ms": 54488,
+   "end_ms": 54888,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 54888,
+   "end_ms": 55240,
+   "p": 0.95
+  },
+  {
+   "w": "tests,",
+   "start_ms": 55240,
+   "end_ms": 55664,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 55664,
+   "end_ms": 56016,
+   "p": 0.95
+  },
+  {
+   "w": "we",
+   "start_ms": 56016,
+   "end_ms": 56344,
+   "p": 0.95
+  },
+  {
+   "w": "set",
+   "start_ms": 56344,
+   "end_ms": 56696,
+   "p": 0.95
+  },
+  {
+   "w": "up",
+   "start_ms": 56696,
+   "end_ms": 57024,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 57024,
+   "end_ms": 57376,
+   "p": 0.95
+  },
+  {
+   "w": "deployment",
+   "start_ms": 57376,
+   "end_ms": 57896,
+   "p": 0.95
+  },
+  {
+   "w": "pipeline.",
+   "start_ms": 57896,
+   "end_ms": 58392,
+   "p": 0.95
+  },
+  {
+   "w": "We",
+   "start_ms": 58572,
+   "end_ms": 58900,
+   "p": 0.95
+  },
+  {
+   "w": "had",
+   "start_ms": 58900,
+   "end_ms": 59252,
+   "p": 0.95
+  },
+  {
+   "w": "some",
+   "start_ms": 59252,
+   "end_ms": 59628,
+   "p": 0.95
+  },
+  {
+   "w": "problems",
+   "start_ms": 59628,
+   "end_ms": 60100,
+   "p": 0.95
+  },
+  {
+   "w": "with",
+   "start_ms": 60100,
+   "end_ms": 60476,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 60476,
+   "end_ms": 60828,
+   "p": 0.95
+  },
+  {
+   "w": "third-party",
+   "start_ms": 60828,
+   "end_ms": 61348,
+   "p": 0.95
+  },
+  {
+   "w": "API,",
+   "start_ms": 61348,
+   "end_ms": 61724,
+   "p": 0.95
+  },
+  {
+   "w": "so",
+   "start_ms": 61724,
+   "end_ms": 62052,
+   "p": 0.95
+  },
+  {
+   "w": "we",
+   "start_ms": 62052,
+   "end_ms": 62380,
+   "p": 0.95
+  },
+  {
+   "w": "added",
+   "start_ms": 62380,
+   "end_ms": 62780,
+   "p": 0.95
+  },
+  {
+   "w": "retries",
+   "start_ms": 62780,
+   "end_ms": 63228,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 63228,
+   "end_ms": 63580,
+   "p": 0.95
+  },
+  {
+   "w": "we",
+   "start_ms": 63580,
+   "end_ms": 63908,
+   "p": 0.95
+  },
+  {
+   "w": "talked",
+   "start_ms": 63908,
+   "end_ms": 64332,
+   "p": 0.95
+  },
+  {
+   "w": "to",
+   "start_ms": 64332,
+   "end_ms": 64660,
+   "p": 0.95
+  },
+  {
+   "w": "their",
+   "start_ms": 64660,
+   "end_ms": 65060,
+   "p": 0.95
+  },
+  {
+   "w": "support",
+   "start_ms": 65060,
+   "end_ms": 65508,
+   "p": 0.95
+  },
+  {
+   "w": "team.",
+   "start_ms": 65508,
+   "end_ms": 65908,
+   "p": 0.95
+  },
+  {
+   "w": "In",
+   "start_ms": 66088,
+   "end_ms": 66416,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 66416,
+   "end_ms": 66768,
+   "p": 0.95
+  },
+  {
+   "w": "end",
+   "start_ms": 66768,
+   "end_ms": 67120,
+   "p": 0.95
+  },
+  {
+   "w": "we",
+   "start_ms": 67120,
+   "end_ms": 67448,
+   "p": 0.95
+  },
+  {
+   "w": "launched",
+   "start_ms": 67448,
+   "end_ms": 67920,
+   "p": 0.95
+  },
+  {
+   "w": "on",
+   "start_ms": 67920,
+   "end_ms": 68248,
+   "p": 0.95
+  },
+  {
+   "w": "time",
+   "start_ms": 68248,
+   "end_ms": 68624,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 68624,
+   "end_ms": 68976,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 68976,
+   "end_ms": 69328,
+   "p": 0.95
+  },
+  {
+   "w": "feature",
+   "start_ms": 69328,
+   "end_ms": 69776,
+   "p": 0.95
+  },
+  {
+   "w": "processed",
+   "start_ms": 69776,
+   "end_ms": 70272,
+   "p": 0.95
+  },
+  {
+   "w": "over",
+   "start_ms": 70272,
+   "end_ms": 70648,
+   "p": 0.95
+  },
+  {
+   "w": "2,000",
+   "start_ms": 70648,
+   "end_ms": 71048,
+   "p": 0.95
+  },
+  {
+   "w": "payments",
+   "start_ms": 71048,
+   "end_ms": 71520,
+   "p": 0.95
+  },
+  {
+   "w": "in",
+   "start_ms": 71520,
+   "end_ms": 71848,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 71848,
+   "end_ms": 72200,
+   "p": 0.95
+  },
+  {
+   "w": "first",
+   "start_ms": 72200,
+   "end_ms": 72600,
+   "p": 0.95
+  },
+  {
+   "w": "week.",
+   "start_ms": 72600,
+   "end_ms": 73000,
+   "p": 0.95
+  }
+ ]
+}

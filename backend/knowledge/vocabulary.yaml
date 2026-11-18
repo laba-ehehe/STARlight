@@ -1,0 +1,82 @@
+# Fact vocabulary: the contract between extractor modules and the rules.
+# Every predicate a rule mentions must be listed here with its arguments.
+# producer = the module (or "rules") that asserts it.
+# KnowledgeBase.validate() checks rules against this file.
+
+predicates:
+  # ---- session inputs (M1 Setup and JD Analyzer, M8 session controller)
+  JD-CUE:              {args: [competency, cue], producer: M1}
+  INTERVIEW-FORMAT:    {args: [format], producer: M1}
+  SESSION-DURATION:    {args: [minutes], producer: M1}
+
+  # ---- question planning (M2 + planning rules)
+  TARGET-COMPETENCY:   {args: [competency, level], producer: rules}
+  QUESTION-COUNT:      {args: [n], producer: rules}
+  QUESTION-BUDGET:     {args: [ms], producer: rules}
+  PLANNED:             {args: [qid, competency], producer: M2}
+  BLOCK-COMPETENCY:    {args: [competency], producer: rules}
+
+  # ---- live session state (M8 / Session)
+  QUESTION:            {args: [qid, competency], producer: M2}
+  BUDGET:              {args: [qid, ms], producer: M2}
+  ELAPSED:             {args: [qid, ms], producer: M8}
+  TIME-LEFT:           {args: [ms], producer: M8}
+  FOLLOWUPS-ASKED:     {args: [qid, n], producer: M8}
+
+  # ---- speech facts (M4 Speech Processor); one answer = all turns of a question
+  ANSWER:              {args: [qid], producer: M4}
+  ANSWER-DURATION:     {args: [qid, seconds], producer: M4}
+  WORD-COUNT:          {args: [qid, n], producer: M4}
+  PACE:                {args: [qid, wpm], producer: M4}
+  FILLER:              {args: [qid, word, at_ms], producer: M4}
+  FILLER-RATE:         {args: [qid, per_minute], producer: M4}
+  LONG-PAUSE:          {args: [qid, at_ms, ms], producer: M4}
+
+  # ---- content facts (M5 Content Feature Extractor)
+  STAR-SEGMENT:        {args: [qid, label, index], producer: M5}
+  CONTEXT-IN-OPENING:  {args: [qid, yes_no], producer: M5}
+  PRONOUN-RATIO:       {args: [qid, we_per_i], producer: M5}
+  ACTION-SHARE:        {args: [qid, share], producer: M5}
+  CONDITIONAL-SHARE:   {args: [qid, share], producer: M5}
+  QUANTIFIED-RESULT:   {args: [qid, text], producer: M5}
+  STAKEHOLDER-REACTION: {args: [qid, text], producer: M5}
+  RELEVANCE:           {args: [qid, score], producer: M5}
+  HEDGE:               {args: [qid, phrase, at_ms], producer: M5}
+  REFLECTION:          {args: [qid], producer: M5}
+  STORY-COUNT:         {args: [qid, n], producer: M5}
+
+  # ---- conclusions from answer-analysis and delivery rules
+  MISSING-CONTEXT:     {args: [qid], producer: rules}
+  UNCLEAR-OWNERSHIP:   {args: [qid], producer: rules}
+  MISSING-RESULT:      {args: [qid], producer: rules}
+  UNSUPPORTED-RESULT:  {args: [qid], producer: rules}
+  HYPOTHETICAL-ANSWER: {args: [qid], producer: rules}
+  OFF-TOPIC:           {args: [qid], producer: rules}
+  THIN-ACTION:         {args: [qid], producer: rules}
+  TOO-SHORT:           {args: [qid], producer: rules}
+  TOO-LONG:            {args: [qid], producer: rules}
+  CLARITY-ISSUE:       {args: [qid, kind, at_ms], producer: rules}
+  OVER-BUDGET:         {args: [qid], producer: rules}
+  SKIP-FOLLOWUP:       {args: [qid, reason], producer: rules}
+
+  # ---- feedback bookkeeping
+  ISSUE:               {args: [qid, criterion, kind], producer: rules}
+  STRENGTH:            {args: [qid, criterion, kind], producer: rules}
+  LEAD-STRENGTH:       {args: [qid, criterion, kind], producer: rules}
+
+  # ---- backward-chaining goals (R16)
+  COMPLETE:            {args: [qid], producer: rules}
+  ON-TOPIC:            {args: [qid], producer: rules}
+  REAL-EXAMPLE:        {args: [qid], producer: rules}
+  CLEAR-OWNERSHIP:     {args: [qid], producer: rules}
+  RESULT-STATED:       {args: [qid], producer: rules}
+  RESULT-SUPPORTED:    {args: [qid], producer: rules}
+
+# Pairs of conclusions that must never both be drawn from the same facts.
+contradictions:
+  - [CLEAR-OWNERSHIP, UNCLEAR-OWNERSHIP]
+  - [ON-TOPIC, OFF-TOPIC]
+  - [REAL-EXAMPLE, HYPOTHETICAL-ANSWER]
+  - [RESULT-STATED, MISSING-RESULT]
+  - [RESULT-SUPPORTED, UNSUPPORTED-RESULT]
+  - [TOO-SHORT, TOO-LONG]

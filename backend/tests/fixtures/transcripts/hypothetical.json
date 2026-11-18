@@ -1,0 +1,470 @@
+{
+ "question_id": "q1",
+ "question": "Tell me about a time you worked on a team under a tight deadline.",
+ "competency": "teamwork",
+ "offset_ms": 42000,
+ "words": [
+  {
+   "w": "I",
+   "start_ms": 42000,
+   "end_ms": 42304,
+   "p": 0.95
+  },
+  {
+   "w": "think",
+   "start_ms": 42304,
+   "end_ms": 42704,
+   "p": 0.95
+  },
+  {
+   "w": "if",
+   "start_ms": 42704,
+   "end_ms": 43032,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 43032,
+   "end_ms": 43336,
+   "p": 0.95
+  },
+  {
+   "w": "was",
+   "start_ms": 43336,
+   "end_ms": 43688,
+   "p": 0.95
+  },
+  {
+   "w": "on",
+   "start_ms": 43688,
+   "end_ms": 44016,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 44016,
+   "end_ms": 44320,
+   "p": 0.95
+  },
+  {
+   "w": "team",
+   "start_ms": 44320,
+   "end_ms": 44696,
+   "p": 0.95
+  },
+  {
+   "w": "with",
+   "start_ms": 44696,
+   "end_ms": 45072,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 45072,
+   "end_ms": 45376,
+   "p": 0.95
+  },
+  {
+   "w": "tight",
+   "start_ms": 45376,
+   "end_ms": 45776,
+   "p": 0.95
+  },
+  {
+   "w": "deadline,",
+   "start_ms": 45776,
+   "end_ms": 46272,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 46272,
+   "end_ms": 46576,
+   "p": 0.95
+  },
+  {
+   "w": "would",
+   "start_ms": 46576,
+   "end_ms": 46976,
+   "p": 0.95
+  },
+  {
+   "w": "first",
+   "start_ms": 46976,
+   "end_ms": 47376,
+   "p": 0.95
+  },
+  {
+   "w": "sit",
+   "start_ms": 47376,
+   "end_ms": 47728,
+   "p": 0.95
+  },
+  {
+   "w": "down",
+   "start_ms": 47728,
+   "end_ms": 48104,
+   "p": 0.95
+  },
+  {
+   "w": "with",
+   "start_ms": 48104,
+   "end_ms": 48480,
+   "p": 0.95
+  },
+  {
+   "w": "everyone",
+   "start_ms": 48480,
+   "end_ms": 48952,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 48952,
+   "end_ms": 49304,
+   "p": 0.95
+  },
+  {
+   "w": "make",
+   "start_ms": 49304,
+   "end_ms": 49680,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 49680,
+   "end_ms": 49984,
+   "p": 0.95
+  },
+  {
+   "w": "plan.",
+   "start_ms": 49984,
+   "end_ms": 50384,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 50564,
+   "end_ms": 50868,
+   "p": 0.95
+  },
+  {
+   "w": "would",
+   "start_ms": 50868,
+   "end_ms": 51268,
+   "p": 0.95
+  },
+  {
+   "w": "break",
+   "start_ms": 51268,
+   "end_ms": 51668,
+   "p": 0.95
+  },
+  {
+   "w": "the",
+   "start_ms": 51668,
+   "end_ms": 52020,
+   "p": 0.95
+  },
+  {
+   "w": "work",
+   "start_ms": 52020,
+   "end_ms": 52396,
+   "p": 0.95
+  },
+  {
+   "w": "into",
+   "start_ms": 52396,
+   "end_ms": 52772,
+   "p": 0.95
+  },
+  {
+   "w": "small",
+   "start_ms": 52772,
+   "end_ms": 53172,
+   "p": 0.95
+  },
+  {
+   "w": "pieces",
+   "start_ms": 53172,
+   "end_ms": 53596,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 53596,
+   "end_ms": 53948,
+   "p": 0.95
+  },
+  {
+   "w": "I'd",
+   "start_ms": 53948,
+   "end_ms": 54300,
+   "p": 0.95
+  },
+  {
+   "w": "assign",
+   "start_ms": 54300,
+   "end_ms": 54724,
+   "p": 0.95
+  },
+  {
+   "w": "them",
+   "start_ms": 54724,
+   "end_ms": 55100,
+   "p": 0.95
+  },
+  {
+   "w": "based",
+   "start_ms": 55100,
+   "end_ms": 55500,
+   "p": 0.95
+  },
+  {
+   "w": "on",
+   "start_ms": 55500,
+   "end_ms": 55828,
+   "p": 0.95
+  },
+  {
+   "w": "what",
+   "start_ms": 55828,
+   "end_ms": 56204,
+   "p": 0.95
+  },
+  {
+   "w": "people",
+   "start_ms": 56204,
+   "end_ms": 56628,
+   "p": 0.95
+  },
+  {
+   "w": "are",
+   "start_ms": 56628,
+   "end_ms": 56980,
+   "p": 0.95
+  },
+  {
+   "w": "good",
+   "start_ms": 56980,
+   "end_ms": 57356,
+   "p": 0.95
+  },
+  {
+   "w": "at.",
+   "start_ms": 57356,
+   "end_ms": 57708,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 57888,
+   "end_ms": 58192,
+   "p": 0.95
+  },
+  {
+   "w": "would",
+   "start_ms": 58192,
+   "end_ms": 58592,
+   "p": 0.95
+  },
+  {
+   "w": "check",
+   "start_ms": 58592,
+   "end_ms": 58992,
+   "p": 0.95
+  },
+  {
+   "w": "in",
+   "start_ms": 58992,
+   "end_ms": 59320,
+   "p": 0.95
+  },
+  {
+   "w": "every",
+   "start_ms": 59320,
+   "end_ms": 59720,
+   "p": 0.95
+  },
+  {
+   "w": "day",
+   "start_ms": 59720,
+   "end_ms": 60072,
+   "p": 0.95
+  },
+  {
+   "w": "to",
+   "start_ms": 60072,
+   "end_ms": 60400,
+   "p": 0.95
+  },
+  {
+   "w": "see",
+   "start_ms": 60400,
+   "end_ms": 60752,
+   "p": 0.95
+  },
+  {
+   "w": "if",
+   "start_ms": 60752,
+   "end_ms": 61080,
+   "p": 0.95
+  },
+  {
+   "w": "anyone",
+   "start_ms": 61080,
+   "end_ms": 61504,
+   "p": 0.95
+  },
+  {
+   "w": "is",
+   "start_ms": 61504,
+   "end_ms": 61832,
+   "p": 0.95
+  },
+  {
+   "w": "stuck.",
+   "start_ms": 61832,
+   "end_ms": 62256,
+   "p": 0.95
+  },
+  {
+   "w": "If",
+   "start_ms": 62436,
+   "end_ms": 62764,
+   "p": 0.95
+  },
+  {
+   "w": "someone",
+   "start_ms": 62764,
+   "end_ms": 63212,
+   "p": 0.95
+  },
+  {
+   "w": "fell",
+   "start_ms": 63212,
+   "end_ms": 63588,
+   "p": 0.95
+  },
+  {
+   "w": "behind,",
+   "start_ms": 63588,
+   "end_ms": 64036,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 64036,
+   "end_ms": 64340,
+   "p": 0.95
+  },
+  {
+   "w": "would",
+   "start_ms": 64340,
+   "end_ms": 64740,
+   "p": 0.95
+  },
+  {
+   "w": "help",
+   "start_ms": 64740,
+   "end_ms": 65116,
+   "p": 0.95
+  },
+  {
+   "w": "them",
+   "start_ms": 65116,
+   "end_ms": 65492,
+   "p": 0.95
+  },
+  {
+   "w": "or",
+   "start_ms": 65492,
+   "end_ms": 65820,
+   "p": 0.95
+  },
+  {
+   "w": "move",
+   "start_ms": 65820,
+   "end_ms": 66196,
+   "p": 0.95
+  },
+  {
+   "w": "tasks",
+   "start_ms": 66196,
+   "end_ms": 66596,
+   "p": 0.95
+  },
+  {
+   "w": "around.",
+   "start_ms": 66596,
+   "end_ms": 67044,
+   "p": 0.95
+  },
+  {
+   "w": "I'd",
+   "start_ms": 67224,
+   "end_ms": 67576,
+   "p": 0.95
+  },
+  {
+   "w": "make",
+   "start_ms": 67576,
+   "end_ms": 67952,
+   "p": 0.95
+  },
+  {
+   "w": "sure",
+   "start_ms": 67952,
+   "end_ms": 68328,
+   "p": 0.95
+  },
+  {
+   "w": "we",
+   "start_ms": 68328,
+   "end_ms": 68656,
+   "p": 0.95
+  },
+  {
+   "w": "communicate",
+   "start_ms": 68656,
+   "end_ms": 69176,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 69176,
+   "end_ms": 69480,
+   "p": 0.95
+  },
+  {
+   "w": "lot",
+   "start_ms": 69480,
+   "end_ms": 69832,
+   "p": 0.95
+  },
+  {
+   "w": "so",
+   "start_ms": 69832,
+   "end_ms": 70160,
+   "p": 0.95
+  },
+  {
+   "w": "nothing",
+   "start_ms": 70160,
+   "end_ms": 70608,
+   "p": 0.95
+  },
+  {
+   "w": "gets",
+   "start_ms": 70608,
+   "end_ms": 70984,
+   "p": 0.95
+  },
+  {
+   "w": "missed.",
+   "start_ms": 70984,
+   "end_ms": 71432,
+   "p": 0.95
+  }
+ ]
+}

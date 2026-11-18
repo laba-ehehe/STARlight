@@ -1,0 +1,344 @@
+{
+ "question_id": "q1",
+ "question": "Tell me about a time you worked on a team under a tight deadline.",
+ "competency": "teamwork",
+ "offset_ms": 42000,
+ "words": [
+  {
+   "w": "I",
+   "start_ms": 42000,
+   "end_ms": 42304,
+   "p": 0.95
+  },
+  {
+   "w": "really",
+   "start_ms": 42304,
+   "end_ms": 42728,
+   "p": 0.95
+  },
+  {
+   "w": "enjoy",
+   "start_ms": 42728,
+   "end_ms": 43128,
+   "p": 0.95
+  },
+  {
+   "w": "programming,",
+   "start_ms": 43128,
+   "end_ms": 43648,
+   "p": 0.95
+  },
+  {
+   "w": "especially",
+   "start_ms": 43648,
+   "end_ms": 44168,
+   "p": 0.95
+  },
+  {
+   "w": "in",
+   "start_ms": 44168,
+   "end_ms": 44496,
+   "p": 0.95
+  },
+  {
+   "w": "Python",
+   "start_ms": 44496,
+   "end_ms": 44920,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 44920,
+   "end_ms": 45272,
+   "p": 0.95
+  },
+  {
+   "w": "JavaScript.",
+   "start_ms": 45272,
+   "end_ms": 45792,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 45972,
+   "end_ms": 46276,
+   "p": 0.95
+  },
+  {
+   "w": "have",
+   "start_ms": 46276,
+   "end_ms": 46652,
+   "p": 0.95
+  },
+  {
+   "w": "taken",
+   "start_ms": 46652,
+   "end_ms": 47052,
+   "p": 0.95
+  },
+  {
+   "w": "courses",
+   "start_ms": 47052,
+   "end_ms": 47500,
+   "p": 0.95
+  },
+  {
+   "w": "in",
+   "start_ms": 47500,
+   "end_ms": 47828,
+   "p": 0.95
+  },
+  {
+   "w": "data",
+   "start_ms": 47828,
+   "end_ms": 48204,
+   "p": 0.95
+  },
+  {
+   "w": "structures,",
+   "start_ms": 48204,
+   "end_ms": 48724,
+   "p": 0.95
+  },
+  {
+   "w": "algorithms,",
+   "start_ms": 48724,
+   "end_ms": 49244,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 49244,
+   "end_ms": 49596,
+   "p": 0.95
+  },
+  {
+   "w": "operating",
+   "start_ms": 49596,
+   "end_ms": 50092,
+   "p": 0.95
+  },
+  {
+   "w": "systems,",
+   "start_ms": 50092,
+   "end_ms": 50564,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 50564,
+   "end_ms": 50916,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 50916,
+   "end_ms": 51220,
+   "p": 0.95
+  },
+  {
+   "w": "got",
+   "start_ms": 51220,
+   "end_ms": 51572,
+   "p": 0.95
+  },
+  {
+   "w": "an",
+   "start_ms": 51572,
+   "end_ms": 51900,
+   "p": 0.95
+  },
+  {
+   "w": "A",
+   "start_ms": 51900,
+   "end_ms": 52204,
+   "p": 0.95
+  },
+  {
+   "w": "in",
+   "start_ms": 52204,
+   "end_ms": 52532,
+   "p": 0.95
+  },
+  {
+   "w": "most",
+   "start_ms": 52532,
+   "end_ms": 52908,
+   "p": 0.95
+  },
+  {
+   "w": "of",
+   "start_ms": 52908,
+   "end_ms": 53236,
+   "p": 0.95
+  },
+  {
+   "w": "them.",
+   "start_ms": 53236,
+   "end_ms": 53636,
+   "p": 0.95
+  },
+  {
+   "w": "In",
+   "start_ms": 53816,
+   "end_ms": 54144,
+   "p": 0.95
+  },
+  {
+   "w": "my",
+   "start_ms": 54144,
+   "end_ms": 54472,
+   "p": 0.95
+  },
+  {
+   "w": "free",
+   "start_ms": 54472,
+   "end_ms": 54848,
+   "p": 0.95
+  },
+  {
+   "w": "time",
+   "start_ms": 54848,
+   "end_ms": 55224,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 55224,
+   "end_ms": 55528,
+   "p": 0.95
+  },
+  {
+   "w": "like",
+   "start_ms": 55528,
+   "end_ms": 55904,
+   "p": 0.95
+  },
+  {
+   "w": "hiking",
+   "start_ms": 55904,
+   "end_ms": 56328,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 56328,
+   "end_ms": 56680,
+   "p": 0.95
+  },
+  {
+   "w": "playing",
+   "start_ms": 56680,
+   "end_ms": 57128,
+   "p": 0.95
+  },
+  {
+   "w": "chess.",
+   "start_ms": 57128,
+   "end_ms": 57552,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 57732,
+   "end_ms": 58036,
+   "p": 0.95
+  },
+  {
+   "w": "am",
+   "start_ms": 58036,
+   "end_ms": 58364,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 58364,
+   "end_ms": 58668,
+   "p": 0.95
+  },
+  {
+   "w": "fast",
+   "start_ms": 58668,
+   "end_ms": 59044,
+   "p": 0.95
+  },
+  {
+   "w": "learner",
+   "start_ms": 59044,
+   "end_ms": 59492,
+   "p": 0.95
+  },
+  {
+   "w": "and",
+   "start_ms": 59492,
+   "end_ms": 59844,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 59844,
+   "end_ms": 60148,
+   "p": 0.95
+  },
+  {
+   "w": "think",
+   "start_ms": 60148,
+   "end_ms": 60548,
+   "p": 0.95
+  },
+  {
+   "w": "I",
+   "start_ms": 60548,
+   "end_ms": 60852,
+   "p": 0.95
+  },
+  {
+   "w": "would",
+   "start_ms": 60852,
+   "end_ms": 61252,
+   "p": 0.95
+  },
+  {
+   "w": "be",
+   "start_ms": 61252,
+   "end_ms": 61580,
+   "p": 0.95
+  },
+  {
+   "w": "a",
+   "start_ms": 61580,
+   "end_ms": 61884,
+   "p": 0.95
+  },
+  {
+   "w": "great",
+   "start_ms": 61884,
+   "end_ms": 62284,
+   "p": 0.95
+  },
+  {
+   "w": "fit",
+   "start_ms": 62284,
+   "end_ms": 62636,
+   "p": 0.95
+  },
+  {
+   "w": "for",
+   "start_ms": 62636,
+   "end_ms": 62988,
+   "p": 0.95
+  },
+  {
+   "w": "this",
+   "start_ms": 62988,
+   "end_ms": 63364,
+   "p": 0.95
+  },
+  {
+   "w": "role.",
+   "start_ms": 63364,
+   "end_ms": 63764,
+   "p": 0.95
+  }
+ ]
+}

@@ -1,0 +1,440 @@
+# STARlight knowledge base.
+#
+# Rule format (see starlight/core/rules.py for the full reference):
+#   id, name, group, priority (higher fires first), status, source
+#   if:   list of conditions — fact / not / test / fuzzy / bind
+#   then: list of actions    — assert (optional span: [?alias]) / retract
+#   followup: question the interviewer asks when this rule blocks the COMPLETE goal
+#   feedback: {criterion, polarity, text, tip} shown in the report
+#
+# Criteria: relevance | clarity | organization | examples
+# Groups:   question_planning | answer_analysis | delivery | session_control | goal | feedback
+# Status:   hypothesis (drafted from coaching practice) | team-reviewed | confirmed | revised | rejected
+#
+# Every analysis rule that finds a problem also asserts (ISSUE ?a criterion kind),
+# so feedback rules such as R17 can reason about criteria without knowing every rule.
+
+rules:
+
+  # ======================================================= question planning (R1–R4)
+
+  - id: R1
+    name: leadership-cues
+    group: question_planning
+    priority: 50
+    status: hypothesis
+    source: Milestone 2 draft
+    description: The job description asks for leadership.
+    if:
+      - fact: [JD-CUE, leadership, ?cue]
+    then:
+      - assert: [TARGET-COMPETENCY, leadership, HIGH]
+
+  - id: R2
+    name: collaboration-cues
+    group: question_planning
+    priority: 50
+    status: hypothesis
+    source: Milestone 2 draft
+    description: The job description asks for teamwork and collaboration.
+    if:
+      - fact: [JD-CUE, teamwork, ?cue]
+    then:
+      - assert: [TARGET-COMPETENCY, teamwork, HIGH]
+
+  - id: R3
+    name: question-count
+    group: question_planning
+    priority: 60
+    status: hypothesis
+    source: Milestone 2 draft
+    description: >
+      Plan floor((D - 5) / 6) main questions for a D-minute session; 5 minutes are
+      reserved for opening and closing, and the rest is split evenly.
+    if:
+      - fact: [SESSION-DURATION, ?d]
+      - bind: {?n: "max(1, floor((?d - 5) / 6))"}
+      - bind: {?budget: "(?d - 5) * 60000 // ?n"}
+    then:
+      - assert: [QUESTION-COUNT, ?n]
+      - assert: [QUESTION-BUDGET, ?budget]
+
+  - id: R4
+    name: cover-competencies-first
+    group: question_planning
+    priority: 40
+    status: hypothesis
+    source: Milestone 2 draft
+    description: >
+      Once a competency has a question, do not pick another one for it while other
+      target competencies are still uncovered.
+    if:
+      - fact: [PLANNED, ?q, ?c]
+      - fact: [TARGET-COMPETENCY, ?other, ?level]
+      - not: [PLANNED, ?_, ?other]
+    then:
+      - assert: [BLOCK-COMPETENCY, ?c]
+
+  # ======================================================= answer analysis (R5–R11)
+
+  - id: R5
+    name: missing-context
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: Milestone 2 draft
+    description: No time, place or role is stated in the first 20% of the answer.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [CONTEXT-IN-OPENING, ?a, "no"]
+        as: ?opening
+    then:
+      - assert: [MISSING-CONTEXT, ?a]
+        span: [?opening]
+      - assert: [ISSUE, ?a, organization, missing-context]
+        span: [?opening]
+    feedback:
+      criterion: organization
+      polarity: negative
+      text: The opening does not say when, where, or what your role was.
+      tip: "Open with one setup sentence, e.g. \"Last spring, as the lead developer on a four-person class project, ...\""
+
+  - id: R6
+    name: unclear-ownership
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: Milestone 2 draft
+    description: The Action part says "we" more than twice as often as "I".
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [PRONOUN-RATIO, ?a, ?ratio]
+        as: ?pronouns
+      - test: "?ratio > 2"
+    then:
+      - assert: [UNCLEAR-OWNERSHIP, ?a]
+        span: [?pronouns]
+      - assert: [ISSUE, ?a, examples, unclear-ownership]
+        span: [?pronouns]
+    followup: What did you personally do?
+    feedback:
+      criterion: examples
+      polarity: negative
+      text: It is hard to tell what you did versus what the team did.
+      tip: "Say \"I\" for your own actions: \"I wrote the scheduler\", not \"we built the app\"."
+
+  - id: R7
+    name: missing-result
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: Milestone 2 draft
+    description: No Result segment is detected.
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [STAR-SEGMENT, ?a, result, ?_]
+    then:
+      - assert: [MISSING-RESULT, ?a]
+      - assert: [ISSUE, ?a, organization, missing-result]
+    followup: What was the outcome?
+    feedback:
+      criterion: organization
+      polarity: negative
+      text: The answer ends without saying how things turned out.
+      tip: Finish with the result — what changed because of what you did?
+
+  - id: R8
+    name: unsupported-result
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: Milestone 2 draft
+    description: A result is stated but nothing shows it worked (no number, time saved, or reaction).
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [STAR-SEGMENT, ?a, result, ?i]
+        as: ?result
+      - not: [QUANTIFIED-RESULT, ?a, ?_]
+      - not: [STAKEHOLDER-REACTION, ?a, ?_]
+    then:
+      - assert: [UNSUPPORTED-RESULT, ?a]
+        span: [?result]
+      - assert: [ISSUE, ?a, examples, unsupported-result]
+        span: [?result]
+    followup: How did you know it worked?
+    feedback:
+      criterion: examples
+      polarity: negative
+      text: The result is a claim without evidence.
+      tip: Add a number, a time saved, or how someone reacted ("my manager adopted it for the whole team").
+
+  - id: R9
+    name: hypothetical-answer
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: Milestone 2 draft
+    description: Most Action verbs are conditional ("I would", "I'd") rather than past tense.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [CONDITIONAL-SHARE, ?a, ?share]
+        as: ?conditional
+      - test: "?share > 0.5"
+    then:
+      - assert: [HYPOTHETICAL-ANSWER, ?a]
+        span: [?conditional]
+      - assert: [ISSUE, ?a, examples, hypothetical]
+        span: [?conditional]
+    followup: Can you tell me about a specific time that actually happened?
+    feedback:
+      criterion: examples
+      polarity: negative
+      text: The answer describes what you would do, not what you did.
+      tip: Behavioral questions want one real past example, told in the past tense.
+
+  - id: R10
+    name: off-topic
+    group: answer_analysis
+    priority: 35
+    status: hypothesis
+    source: Milestone 2 draft
+    description: Fewer than 30% of the answer's keywords relate to the question's competency.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [RELEVANCE, ?a, ?score]
+      - test: "?score < 0.3"
+    then:
+      - assert: [OFF-TOPIC, ?a]
+      - assert: [ISSUE, ?a, relevance, off-topic]
+    followup: "Let me ask that again: {question}"
+    feedback:
+      criterion: relevance
+      polarity: negative
+      text: The answer does not address what the question asked about.
+      tip: Repeat the key word of the question in your first sentence, then tell a story about exactly that.
+
+  - id: R11
+    name: thin-action
+    group: answer_analysis
+    priority: 30
+    status: hypothesis
+    source: Milestone 2 draft
+    description: The Action part is less than 40% of the answer's words.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [ACTION-SHARE, ?a, ?share]
+      - test: "?share < 0.4"
+    then:
+      - assert: [THIN-ACTION, ?a]
+      - assert: [ISSUE, ?a, organization, thin-action]
+    feedback:
+      criterion: organization
+      polarity: negative
+      text: Most of the answer is setup; little of it is about what you did.
+      tip: Spend most of your time on the Action — the steps you took and why.
+
+  # ======================================================= delivery (R12–R14)
+
+  - id: R12
+    name: answer-too-short
+    group: delivery
+    priority: 20
+    status: hypothesis
+    source: Milestone 2 draft
+    description: The answer duration is SHORT.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [ANSWER-DURATION, ?a, ?seconds]
+      - fuzzy: [?seconds, answer_duration, SHORT]
+    then:
+      - assert: [TOO-SHORT, ?a]
+      - assert: [ISSUE, ?a, organization, too-short]
+    feedback:
+      criterion: organization
+      polarity: negative
+      text: The answer is short for a behavioral question.
+      tip: Expand the Action and Result — aim for about 90 seconds to 2.5 minutes.
+
+  - id: R13
+    name: answer-too-long
+    group: delivery
+    priority: 20
+    status: hypothesis
+    source: Milestone 2 draft
+    description: The answer duration is LONG.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [ANSWER-DURATION, ?a, ?seconds]
+      - fuzzy: [?seconds, answer_duration, LONG]
+    then:
+      - assert: [TOO-LONG, ?a]
+      - assert: [ISSUE, ?a, organization, too-long]
+    feedback:
+      criterion: organization
+      polarity: negative
+      text: The answer runs long.
+      tip: Tighten the Situation to two sentences; the marked part is where the setup ran long.
+
+  - id: R14a
+    name: fast-pace
+    group: delivery
+    priority: 20
+    status: hypothesis
+    source: Milestone 2 draft (R14, pace half)
+    description: Speaking pace is FAST.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [PACE, ?a, ?wpm]
+      - fuzzy: [?wpm, pace, FAST]
+    then:
+      - assert: [CLARITY-ISSUE, ?a, pace, all]
+      - assert: [ISSUE, ?a, clarity, fast-pace]
+    feedback:
+      criterion: clarity
+      polarity: negative
+      text: You spoke quickly, which makes details hard to follow.
+      tip: Pause briefly after each STAR part; aim for about 130–160 words per minute.
+
+  - id: R14b
+    name: filler-words
+    group: delivery
+    priority: 20
+    status: hypothesis
+    source: Milestone 2 draft (R14, filler half)
+    description: More than 6 filler words per minute; mark each one in the replay.
+    if:
+      - fact: [ANSWER, ?a]
+        as: ?answer
+      - fact: [FILLER-RATE, ?a, ?rate]
+      - test: "?rate > 6"
+      - fact: [FILLER, ?a, ?word, ?at]
+        as: ?filler
+    then:
+      - assert: [CLARITY-ISSUE, ?a, filler, ?at]
+        span: [?filler]
+      - assert: [ISSUE, ?a, clarity, fillers]
+        span: [?answer]
+    feedback:
+      criterion: clarity
+      polarity: negative
+      text: Frequent filler words ("um", "uh", "like") distract from the content.
+      tip: Replace fillers with a short silent pause; listen to the marked moments.
+
+  # ======================================================= session control (R15)
+
+  - id: R15
+    name: over-budget
+    group: session_control
+    priority: 90
+    status: hypothesis
+    source: Milestone 2 draft
+    description: Time on this question exceeds its budget by more than 30 seconds.
+    if:
+      - fact: [ELAPSED, ?q, ?elapsed]
+      - fact: [BUDGET, ?q, ?budget]
+      - test: "?elapsed > ?budget + 30000"
+    then:
+      - assert: [OVER-BUDGET, ?q]
+      - assert: [SKIP-FOLLOWUP, ?q, over-budget]
+    feedback:
+      criterion: pacing
+      polarity: note
+      text: This question ran over its time budget, so the follow-up was skipped.
+      tip: Keep answers near two minutes so there is time for follow-ups.
+
+  # ======================================================= R16: goal for backward chaining
+  # The follow-up is chosen by trying to prove (COMPLETE ?a). Its sub-goals are listed
+  # in R16's priority order: OFF-TOPIC > HYPOTHETICAL > UNCLEAR-OWNERSHIP >
+  # MISSING-RESULT > UNSUPPORTED-RESULT. The first sub-goal that cannot be proven
+  # picks the follow-up (the follow-up text of the rule that blocked it).
+
+  - id: R16
+    name: complete-answer
+    group: goal
+    priority: 100
+    status: hypothesis
+    source: Milestone 2 draft (meta-rule for conflict resolution)
+    description: An answer is complete when all five sub-goals hold, checked in priority order.
+    if:
+      - fact: [ANSWER, ?a]
+      - fact: [ON-TOPIC, ?a]
+      - fact: [REAL-EXAMPLE, ?a]
+      - fact: [CLEAR-OWNERSHIP, ?a]
+      - fact: [RESULT-STATED, ?a]
+      - fact: [RESULT-SUPPORTED, ?a]
+    then:
+      - assert: [COMPLETE, ?a]
+
+  - id: R16.1
+    name: on-topic
+    group: goal
+    status: hypothesis
+    source: Milestone 2 draft
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [OFF-TOPIC, ?a]
+    then:
+      - assert: [ON-TOPIC, ?a]
+
+  - id: R16.2
+    name: real-example
+    group: goal
+    status: hypothesis
+    source: Milestone 2 draft
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [HYPOTHETICAL-ANSWER, ?a]
+    then:
+      - assert: [REAL-EXAMPLE, ?a]
+
+  - id: R16.3
+    name: clear-ownership
+    group: goal
+    status: hypothesis
+    source: Milestone 2 draft
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [UNCLEAR-OWNERSHIP, ?a]
+    then:
+      - assert: [CLEAR-OWNERSHIP, ?a]
+
+  - id: R16.4
+    name: result-stated
+    group: goal
+    status: hypothesis
+    source: Milestone 2 draft
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [MISSING-RESULT, ?a]
+    then:
+      - assert: [RESULT-STATED, ?a]
+
+  - id: R16.5
+    name: result-supported
+    group: goal
+    status: hypothesis
+    source: Milestone 2 draft
+    if:
+      - fact: [ANSWER, ?a]
+      - not: [UNSUPPORTED-RESULT, ?a]
+    then:
+      - assert: [RESULT-SUPPORTED, ?a]
+
+  # ======================================================= feedback (R17)
+
+  - id: R17
+    name: lead-with-strength
+    group: feedback
+    priority: 10
+    status: hypothesis
+    source: Milestone 2 draft
+    description: >
+      A criterion with no negative facts and at least one supporting fact opens the
+      feedback with that strength, linked to its timestamp.
+    if:
+      - fact: [STRENGTH, ?a, ?criterion, ?kind]
+        as: ?strength
+      - not: [ISSUE, ?a, ?criterion, ?_]
+    then:
+      - assert: [LEAD-STRENGTH, ?a, ?criterion, ?kind]
+        span: [?strength]
